@@ -44,5 +44,17 @@ describe('Task Model', () => {
       expect(task.id).toBe(taskMock.id);
       expect(task.title).toBe(updateProps.title);
     });
+
+    it('should update task deadline on success', () => {
+      const task = new Task(taskMock);
+      const updateProps = TaskDataBuilder.aTask()
+        .withDeadline(new Date(2024, 12, 31))
+        .build();
+
+      task.update(updateProps);
+
+      expect(task.id).toBe(taskMock.id);
+      expect(task.deadline).toEqual(updateProps.deadline);
+    });
   });
 });
