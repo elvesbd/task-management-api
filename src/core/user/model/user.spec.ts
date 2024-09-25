@@ -54,5 +54,14 @@ describe('User Model', () => {
       expect(user.id).toBe(userMock.id);
       expect(user.role).toBe(updateProps.role);
     });
+
+    it('should update user password on success', () => {
+      const user = new User(userMock);
+
+      user.updatePassword('newSecurePassword');
+
+      expect(user.id).toBe(userMock.id);
+      expect(user.password).toBe('newSecurePassword');
+    });
   });
 });
