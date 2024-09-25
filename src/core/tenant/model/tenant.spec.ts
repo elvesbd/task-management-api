@@ -34,8 +34,20 @@ describe('Tenant Model', () => {
 
       tenant.update(updateProps);
 
-      expect(tenant.id).toBeDefined();
+      expect(tenant.id).toBe(tenantMock.id);
       expect(tenant.name).toBe(updateProps.name);
+    });
+
+    it('should update tenant document on success', () => {
+      const tenant = new Tenant(tenantMock);
+      const updateProps = TenantDataBuilder.anTenant()
+        .withDocument('16550433000120')
+        .build();
+
+      tenant.update(updateProps);
+
+      expect(tenant.id).toBe(tenantMock.id);
+      expect(tenant.document).toBe(updateProps.document);
     });
   });
 });
