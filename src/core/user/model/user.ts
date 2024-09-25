@@ -27,13 +27,14 @@ export class User extends Entity<UserProps> {
     return new User(props);
   }
 
-  public update(
-    props: Pick<UserProps, 'role' | 'email' | 'password' | 'tenantId'>,
-  ): void {
+  public update(props: Pick<UserProps, 'role' | 'email' | 'tenantId'>): void {
     this._role = props.role;
     this._email = props.email;
-    this._password = props.password;
     this._tenantId = props.tenantId;
+  }
+
+  public updatePassword(hashedPassword: string): void {
+    this._password = hashedPassword;
   }
 
   get role(): string {
