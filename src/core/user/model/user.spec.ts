@@ -17,4 +17,16 @@ describe('User Model', () => {
       expect(user.tenantId).toBe(userMock.tenantId);
     });
   });
+
+  describe('create', () => {
+    it('should create a User using the static create method', () => {
+      const user = User.create(props);
+
+      expect(user.id).toBeDefined();
+      expect(user.email).toBe(props.email);
+      expect(user.role).toBe(props.role);
+      expect(user.password).toBe(props.password);
+      expect(user.tenantId).toBe(props.tenantId);
+    });
+  });
 });
