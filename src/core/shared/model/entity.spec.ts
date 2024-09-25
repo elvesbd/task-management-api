@@ -18,4 +18,14 @@ describe('Entity', () => {
     expect(generatedId).toBeDefined();
     expect(generatedId).toHaveLength(36);
   });
+
+  it('should handle other properties while managing the ID', () => {
+    const providedId = '123e4567-e89b-12d3-a456-426614174000';
+    const entityProps = { id: providedId, otherProp: 'example' };
+
+    const entity = new Entity(entityProps);
+
+    expect(entity.id).toBe(providedId);
+    expect(entityProps.otherProp).toBe('example');
+  });
 });
