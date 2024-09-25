@@ -18,4 +18,17 @@ describe('Task Model', () => {
       expect(task.description).toBe(taskMock.description);
     });
   });
+
+  describe('create', () => {
+    it('should create a Task using the static create method', () => {
+      const task = Task.create(props);
+
+      expect(task.id).toBeDefined();
+      expect(task.title).toBe(props.title);
+      expect(task.deadline).toEqual(props.deadline);
+      expect(task.tenantId).toBe(props.tenantId);
+      expect(task.status).toBe(TaskStatus.INPROGRESS);
+      expect(task.description).toBe(props.description);
+    });
+  });
 });
