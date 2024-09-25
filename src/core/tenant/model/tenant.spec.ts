@@ -15,4 +15,14 @@ describe('Tenant Model', () => {
       expect(result.document).toBe(tenant.document);
     });
   });
+
+  describe('create', () => {
+    it('should create a Tenant using the static create method', () => {
+      const result = Tenant.create(props);
+
+      expect(result.id).toBeDefined();
+      expect(result.name).toBe(props.name);
+      expect(result.document).toBe(props.document);
+    });
+  });
 });
