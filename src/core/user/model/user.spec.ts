@@ -75,5 +75,21 @@ describe('User Model', () => {
       expect(user.id).toBe(userMock.id);
       expect(user.tenantId).toBe(updateProps.tenantId);
     });
+
+    it('should update user role, email, and tenantId on success', () => {
+      const user = new User(userMock);
+      const updateProps = UserDataBuilder.aUser()
+        .withEmail('newemail@example.com')
+        .withRole(UserRole.ADMIN)
+        .withTenantId('newTenantId')
+        .build();
+
+      user.update(updateProps);
+
+      expect(user.id).toBe(userMock.id);
+      expect(user.email).toBe(updateProps.email);
+      expect(user.role).toBe(updateProps.role);
+      expect(user.tenantId).toBe(updateProps.tenantId);
+    });
   });
 });
