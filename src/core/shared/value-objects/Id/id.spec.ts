@@ -30,4 +30,12 @@ describe('Id Value Object', () => {
     expect(id.value).toBe(providedUuid);
     expect(uuidv7).not.toHaveBeenCalled();
   });
+
+  it('should return a valid UUID from the value getter', () => {
+    const mockUuid = '019229dc-e8c6-72cc-b599-c938df401967';
+
+    const id = new Id(mockUuid);
+
+    expect(validateUUID(id.value)).toBe(true);
+  });
 });
