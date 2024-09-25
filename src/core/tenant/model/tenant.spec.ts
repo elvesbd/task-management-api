@@ -49,5 +49,19 @@ describe('Tenant Model', () => {
       expect(tenant.id).toBe(tenantMock.id);
       expect(tenant.document).toBe(updateProps.document);
     });
+
+    it('should update tenant name and document on success', () => {
+      const tenant = new Tenant(tenantMock);
+      const updateProps = TenantDataBuilder.anTenant()
+        .withName('Horizon Technologies')
+        .withDocument('16550433000120')
+        .build();
+
+      tenant.update(updateProps);
+
+      expect(tenant.id).toBe(tenantMock.id);
+      expect(tenant.name).toBe(updateProps.name);
+      expect(tenant.document).toBe(updateProps.document);
+    });
   });
 });
