@@ -6,7 +6,7 @@ type Tenant = {
 
 export class TenantDataBuilder {
   private props: Tenant = {
-    name: 'John Doe',
+    name: 'InovaTech Solutions',
     document: '41650433000170',
   };
 
