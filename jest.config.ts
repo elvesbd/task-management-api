@@ -12,8 +12,9 @@ const config: Config = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '@core/(.+)': '<rootDir>/src/core/$1',
-    '@config/(.+)': '<rootDir>/src/config/$1',
+    '@test/(.+)': '<rootDir>/src/test/$1',
     '@infra/(.+)': '<rootDir>/src/infra/$1',
+    '@config/(.+)': '<rootDir>/src/config/$1',
   },
   modulePathIgnorePatterns: ['.*\\.module\\.ts$', '<rootDir>/src/config'],
 };
