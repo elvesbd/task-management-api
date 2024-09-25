@@ -29,4 +29,18 @@ describe('User Model', () => {
       expect(user.tenantId).toBe(props.tenantId);
     });
   });
+
+  describe('update', () => {
+    it('should update user email on success', () => {
+      const user = new User(userMock);
+      const updateProps = UserDataBuilder.aUser()
+        .withEmail('newemail@example.com')
+        .build();
+
+      user.update(updateProps);
+
+      expect(user.id).toBe(userMock.id);
+      expect(user.email).toBe(updateProps.email);
+    });
+  });
 });
