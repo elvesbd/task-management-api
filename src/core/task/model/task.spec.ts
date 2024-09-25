@@ -87,4 +87,15 @@ describe('Task Model', () => {
       expect(task.description).toBe(updateProps.description);
     });
   });
+
+  describe('assignStatus', () => {
+    it('should assign a new status to the task on success', () => {
+      const task = new Task(taskMock);
+      const newStatus = TaskStatus.COMPLETED;
+
+      task.assignStatus(newStatus);
+
+      expect(task.status).toBe(newStatus);
+    });
+  });
 });
