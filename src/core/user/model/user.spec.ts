@@ -42,5 +42,17 @@ describe('User Model', () => {
       expect(user.id).toBe(userMock.id);
       expect(user.email).toBe(updateProps.email);
     });
+
+    it('should update user role on success', () => {
+      const user = new User(userMock);
+      const updateProps = UserDataBuilder.aUser()
+        .withRole(UserRole.ADMIN)
+        .build();
+
+      user.update(updateProps);
+
+      expect(user.id).toBe(userMock.id);
+      expect(user.role).toBe(updateProps.role);
+    });
   });
 });
