@@ -9,4 +9,13 @@ describe('Entity', () => {
 
     expect(entity.id).toBe(providedId);
   });
+
+  it('should create an entity and generate a new ID if none is provided', () => {
+    const entityProps = {};
+    const entity = new Entity(entityProps);
+
+    const generatedId = entity.id;
+    expect(generatedId).toBeDefined();
+    expect(generatedId).toHaveLength(36);
+  });
 });
