@@ -21,4 +21,13 @@ describe('Id Value Object', () => {
     expect(id.value).toBe(mockUuid);
     expect(uuidv7).toHaveBeenCalled();
   });
+
+  it('should use the provided value if passed to the constructor', () => {
+    const providedUuid = '123e4567-e89b-12d3-a456-426614174000';
+
+    const id = new Id(providedUuid);
+
+    expect(id.value).toBe(providedUuid);
+    expect(uuidv7).not.toHaveBeenCalled();
+  });
 });
