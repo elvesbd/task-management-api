@@ -68,5 +68,23 @@ describe('Task Model', () => {
       expect(task.id).toBe(taskMock.id);
       expect(task.description).toBe(updateProps.description);
     });
+
+    it('should update task title, deadline, tenantId, and description on success', () => {
+      const task = new Task(taskMock);
+      const updateProps = TaskDataBuilder.aTask()
+        .withTitle('New Task Title')
+        .withDeadline(new Date(2024, 12, 31))
+        .withTenantId('newTenantId')
+        .withDescription('New Task Description')
+        .build();
+
+      task.update(updateProps);
+
+      expect(task.id).toBe(taskMock.id);
+      expect(task.title).toBe(updateProps.title);
+      expect(task.deadline).toEqual(updateProps.deadline);
+      expect(task.tenantId).toBe(updateProps.tenantId);
+      expect(task.description).toBe(updateProps.description);
+    });
   });
 });
