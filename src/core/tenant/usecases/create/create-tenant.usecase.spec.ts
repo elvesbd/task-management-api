@@ -47,5 +47,12 @@ describe('CreateTenantUseCase', () => {
         new BadRequestException('Tenant already exists with this document'),
       );
     });
+
+    it('should call tenantRepository save on success', async () => {
+      await sut.execute(input);
+
+      expect(tenantRepository.save).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.save).toHaveBeenCalledWith(expect.any(Tenant));
+    });
   });
 });
