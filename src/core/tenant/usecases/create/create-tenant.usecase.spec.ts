@@ -54,5 +54,12 @@ describe('CreateTenantUseCase', () => {
       expect(tenantRepository.save).toHaveBeenCalledTimes(1);
       expect(tenantRepository.save).toHaveBeenCalledWith(expect.any(Tenant));
     });
+
+    it('should return a tenant id on success', async () => {
+      const output = await sut.execute(input);
+
+      expect(output).toBeDefined();
+      expect(output.tenantId).toHaveLength(36);
+    });
   });
 });
