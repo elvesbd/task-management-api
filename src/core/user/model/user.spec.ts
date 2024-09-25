@@ -63,5 +63,17 @@ describe('User Model', () => {
       expect(user.id).toBe(userMock.id);
       expect(user.password).toBe('newSecurePassword');
     });
+
+    it('should update user tenantId on success', () => {
+      const user = new User(userMock);
+      const updateProps = UserDataBuilder.aUser()
+        .withTenantId('newTenantId')
+        .build();
+
+      user.update(updateProps);
+
+      expect(user.id).toBe(userMock.id);
+      expect(user.tenantId).toBe(updateProps.tenantId);
+    });
   });
 });
