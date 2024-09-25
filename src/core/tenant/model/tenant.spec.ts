@@ -3,26 +3,39 @@ import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('Tenant Model', () => {
   const props = TenantDataBuilder.anTenant().build();
-  const tenant = TenantDataBuilder.anTenant().withId().build();
-  console.log('props', props);
+  const tenantMock = TenantDataBuilder.anTenant().withId().build();
 
   describe('constructor', () => {
     it('should create a new Tenant on success', () => {
-      const result = new Tenant(tenant);
+      const tenant = new Tenant(tenantMock);
 
-      expect(result.id).toBe(tenant.id);
-      expect(result.name).toBe(tenant.name);
-      expect(result.document).toBe(tenant.document);
+      expect(tenant.id).toBe(tenantMock.id);
+      expect(tenant.name).toBe(tenantMock.name);
+      expect(tenant.document).toBe(tenantMock.document);
     });
   });
 
   describe('create', () => {
     it('should create a Tenant using the static create method', () => {
-      const result = Tenant.create(props);
+      const tenant = Tenant.create(props);
 
-      expect(result.id).toBeDefined();
-      expect(result.name).toBe(props.name);
-      expect(result.document).toBe(props.document);
+      expect(tenant.id).toBeDefined();
+      expect(tenant.name).toBe(props.name);
+      expect(tenant.document).toBe(props.document);
+    });
+  });
+
+  describe('update', () => {
+    it('should update tenant name on success', () => {
+      const tenant = new Tenant(tenantMock);
+      const updateProps = TenantDataBuilder.anTenant()
+        .withName('Horizon Technologies')
+        .build();
+
+      tenant.update(updateProps);
+
+      expect(tenant.id).toBeDefined();
+      expect(tenant.name).toBe(updateProps.name);
     });
   });
 });
