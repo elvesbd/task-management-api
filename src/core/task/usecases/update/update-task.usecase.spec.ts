@@ -91,5 +91,12 @@ describe('UpdateTaskUseCase', () => {
         new NotFoundException('Task not found!'),
       );
     });
+
+    it('should call tenantRepository save once', async () => {
+      await sut.execute({ ...input, id });
+
+      expect(taskRepository.save).toHaveBeenCalledTimes(1);
+      expect(taskRepository.save).toHaveBeenCalledWith(task);
+    });
   });
 });
