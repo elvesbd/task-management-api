@@ -77,5 +77,19 @@ describe('LoginUseCase', () => {
         sut.execute({ email: user.email, password: 'wrongPassword' }),
       ).rejects.toThrow(new UnauthorizedException('Invalid credentials'));
     });
+
+    it('should call tokenSigner signSync', async () => {
+      await sut.execute({
+        email: user.email,
+        password: user.password,
+      });
+
+      expect(tokenSigner.signAsync).toHaveBeenCalledTimes(1);
+      expect(tokenSigner.signAsync).toHaveBeenCalledWith({
+        sub: user.id,
+        role: user.role,
+        tenantId: user.tenantId,
+      });
+    });
   });
 });
