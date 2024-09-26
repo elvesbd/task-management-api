@@ -48,5 +48,12 @@ describe('UpdateUserUseCase', () => {
         new NotFoundException('Tenant not found!'),
       );
     });
+
+    it('should call userRepository save on success', async () => {
+      await sut.execute({ ...input, id: tenantId });
+
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
+    });
   });
 });
