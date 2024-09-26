@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { UserRole } from '@core/user/enum';
 import { UseCase } from '@core/shared/contracts/usecases';
 import { UserRepository } from '@core/user/ports/repository';
-import { UserRole } from '@core/user/enum';
 
 type Input = {
   id: string;
@@ -16,9 +16,12 @@ export class UpdateUserUseCase implements UseCase<Input, void> {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(input: Input): Promise<void> {
-    const user = await this.userRepository.findByEmail(input.email);
+    const user = await this.userRepository.findByIdAndTenantId(
+      input.id,
+      input.tenantId,
+    );
 
-    if (!user) throw new NotFoundException('Tenant not found!');
+    if (!user) throw new NotFoundException('User not found!');
 
     user.update(input);
     await this.userRepository.save(user);
