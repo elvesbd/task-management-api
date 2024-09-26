@@ -52,5 +52,14 @@ describe('CreateUserUseCase', () => {
       expect(userRepository.save).toHaveBeenCalledTimes(1);
       expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
     });
+
+    it('should create a new user when no existing user is found', async () => {
+      const output = await sut.execute(input);
+
+      expect(output.user.id).toBeDefined();
+      expect(output.user.role).toBe(input.role);
+      expect(output.user.email).toBe(input.email);
+      expect(output.user.tenantId).toBe(input.tenantId);
+    });
   });
 });
