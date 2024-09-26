@@ -70,5 +70,12 @@ describe('FindAllTaskUseCase', () => {
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
       );
     });
+
+    it('should call taskRepository find all once', async () => {
+      await sut.execute(tenantId);
+
+      expect(taskRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(taskRepository.findAll).toHaveBeenCalledWith(tenantId);
+    });
   });
 });
