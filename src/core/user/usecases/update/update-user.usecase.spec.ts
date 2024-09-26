@@ -98,5 +98,12 @@ describe('UpdateUserUseCase', () => {
       expect(user.role).toBe(updateInput.role);
       expect(user.email).toBe(updateInput.email);
     });
+
+    it('should call userRepository save on success', async () => {
+      await sut.execute({ ...input, id });
+
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
+    });
   });
 });
