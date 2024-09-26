@@ -48,5 +48,12 @@ describe('FindAllTenantUseCase', () => {
 
       expect(output).toHaveLength(0);
     });
+
+    it('should return a list of tenants when tenants are found', async () => {
+      const output = await sut.execute();
+
+      expect(output).toHaveLength(1);
+      expect(output).toStrictEqual([tenant]);
+    });
   });
 });
