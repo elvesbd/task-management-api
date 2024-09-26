@@ -1,0 +1,40 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { Task } from '@core/task/model';
+import { UseCase } from '@core/shared/contracts/usecases';
+import { TaskRepository } from '@core/task/ports/repository';
+import { TenantRepository } from '@core/tenant/ports/repository';
+
+type Input = {
+  id: string;
+  title: string;
+  deadline: Date;
+  tenantId: string;
+  description: string;
+};
+
+@Injectable()
+export class UpdateTaskUseCase implements UseCase<Input, Task> {
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private readonly tenantRepository: TenantRepository,
+  ) {}
+
+  async execute(input: Input): Promise<Task> {
+    const tenant = await this.tenantRepository.findById(input.tenantId);
+    if (!tenant)
+      throw new NotFoundException(`Tenant not found for ID: ${input.tenantId}`);
+
+    const task = await this.taskRepository.findByIdAndTenantId(
+      input.id,
+      input.tenantId,
+    );
+
+    if (!task) throw new NotFoundException('Task not found!');
+
+    task.update(input);
+    await this.taskRepository.save(task);
+
+    return task;
+  }
+}
