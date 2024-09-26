@@ -91,5 +91,14 @@ describe('LoginUseCase', () => {
         tenantId: user.tenantId,
       });
     });
+
+    it('should return an access token when credentials are valid', async () => {
+      const output = await sut.execute({
+        email: user.email,
+        password: user.password,
+      });
+
+      expect(output).toStrictEqual({ accessToken: 'accessToken' });
+    });
   });
 });
