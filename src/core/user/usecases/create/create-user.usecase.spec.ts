@@ -45,5 +45,12 @@ describe('CreateUserUseCase', () => {
         new BadRequestException('User already exists with this email!'),
       );
     });
+
+    it('should call tenantRepository save on success', async () => {
+      await sut.execute(input);
+
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
+    });
   });
 });
