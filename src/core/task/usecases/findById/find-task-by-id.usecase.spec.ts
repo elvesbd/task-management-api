@@ -91,5 +91,11 @@ describe('FindTaskByIdUseCase', () => {
         new NotFoundException('Task not found!'),
       );
     });
+
+    it('should return a task on success', async () => {
+      const output = await sut.execute(input);
+
+      expect(output).toStrictEqual(task);
+    });
   });
 });
