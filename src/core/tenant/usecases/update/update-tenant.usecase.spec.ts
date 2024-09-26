@@ -56,5 +56,17 @@ describe('UpdateTenantUseCase', () => {
       expect(tenantRepository.save).toHaveBeenCalledTimes(1);
       expect(tenantRepository.save).toHaveBeenCalledWith(expect.any(Tenant));
     });
+
+    it('should update a tenant on success', async () => {
+      const updateInput = TenantDataBuilder.anTenant()
+        .withName('Horizon Technologies')
+        .withDocument('16550433000120')
+        .build();
+
+      await sut.execute({ ...updateInput, id: tenantId });
+
+      expect(tenant.name).toBe(updateInput.name);
+      expect(tenant.document).toBe(updateInput.document);
+    });
   });
 });
