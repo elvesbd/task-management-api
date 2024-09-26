@@ -72,5 +72,15 @@ describe('DeleteTaskUseCase', () => {
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
       );
     });
+
+    it('should call taskRepository findByIdAndTenantId once', async () => {
+      await sut.execute(input);
+
+      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
+      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
+        input.id,
+        tenant.id,
+      );
+    });
   });
 });
