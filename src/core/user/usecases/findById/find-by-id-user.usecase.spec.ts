@@ -49,5 +49,15 @@ describe('FindByIdUserUseCase', () => {
         input.tenantId,
       );
     });
+
+    it('should throw a NotFoundException if no user is found', async () => {
+      jest
+        .spyOn(userRepository, 'findByIdAndTenantId')
+        .mockResolvedValueOnce(null);
+
+      await expect(sut.execute(input)).rejects.toThrow(
+        new NotFoundException(`User not found for ID: ${input.tenantId}`),
+      );
+    });
   });
 });
