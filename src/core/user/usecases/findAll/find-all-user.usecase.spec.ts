@@ -59,5 +59,12 @@ describe('FindAllUserUseCase', () => {
         new NotFoundException(`No users found for tenant ID: ${tenantId}`),
       );
     });
+
+    it('should return a list of users when users are found', async () => {
+      const output = await sut.execute(tenantId);
+
+      expect(output).toHaveLength(1);
+      expect(output).toStrictEqual([tenant]);
+    });
   });
 });
