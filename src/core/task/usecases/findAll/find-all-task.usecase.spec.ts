@@ -93,5 +93,12 @@ describe('FindAllTaskUseCase', () => {
         new NotFoundException(`No tasks found for tenant ID: ${tenantId}`),
       );
     });
+
+    it('should return all task on tenant', async () => {
+      const output = await sut.execute(tenantId);
+
+      expect(output).toHaveLength(1);
+      expect(output).toStrictEqual([task]);
+    });
   });
 });
