@@ -1,7 +1,8 @@
-import { UseCase } from '@core/shared/contracts/usecases';
-import { Tenant } from '@core/tenant/model';
-import { TenantRepository } from '@core/tenant/ports/repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
+
+import { Tenant } from '@core/tenant/model';
+import { UseCase } from '@core/shared/contracts/usecases';
+import { TenantRepository } from '@core/tenant/ports/repository';
 
 type Input = {
   name: string;
