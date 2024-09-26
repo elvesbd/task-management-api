@@ -6,6 +6,7 @@ import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 
 type Input = {
+  id: string;
   title: string;
   deadline: Date;
   tenantId: string;
@@ -13,7 +14,7 @@ type Input = {
 };
 
 @Injectable()
-export class CreateTaskUseCase implements UseCase<Input, Task> {
+export class UpdateTaskUseCase implements UseCase<Input, Task> {
   constructor(
     private readonly taskRepository: TaskRepository,
     private readonly tenantRepository: TenantRepository,
@@ -24,10 +25,14 @@ export class CreateTaskUseCase implements UseCase<Input, Task> {
     if (!tenant)
       throw new NotFoundException(`Tenant not found for ID: ${input.tenantId}`);
 
-    const task = Task.create({
-      ...input,
-      tenantId: tenant.id,
-    });
+    const task = await this.taskRepository.findByIdAndTenantId(
+      input.id,
+      input.tenantId,
+    );
+
+    if (!task) throw new NotFoundException('Task not found!');
+
+    task.update(input);
     await this.taskRepository.save(task);
 
     return task;
