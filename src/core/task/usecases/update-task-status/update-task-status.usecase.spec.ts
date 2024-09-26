@@ -66,4 +66,12 @@ describe('UpdateTaskStatusUseCase', () => {
     expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
     expect(tenantRepository.findById).toHaveBeenCalledWith(input.tenantId);
   });
+
+  it('should throw a NotFoundException if tenant is not found', async () => {
+    jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
+
+    await expect(sut.execute(input)).rejects.toThrow(
+      new NotFoundException(`Tenant with ID ${input.tenantId} not found.`),
+    );
+  });
 });
