@@ -27,7 +27,7 @@ export class UpdateTaskUseCase implements UseCase<Input, Task> {
 
     const task = await this.taskRepository.findByIdAndTenantId(
       input.id,
-      input.tenantId,
+      tenant.id,
     );
 
     if (!task) throw new NotFoundException('Task not found!');
