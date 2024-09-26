@@ -43,5 +43,13 @@ describe('FindAllUserUseCase', () => {
       expect(userRepository.findAll).toHaveBeenCalledTimes(1);
       expect(userRepository.findAll).toHaveBeenCalledWith(tenantId);
     });
+
+    it('should throw a NotFoundException if returns empty array', async () => {
+      jest.spyOn(userRepository, 'findAll').mockResolvedValueOnce([]);
+
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException(`No users found for tenant ID: ${tenantId}`),
+      );
+    });
   });
 });
