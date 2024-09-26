@@ -85,5 +85,13 @@ describe('FindAllTaskUseCase', () => {
         new NotFoundException(`No tasks found for tenant ID: ${tenantId}`),
       );
     });
+
+    it('should throw a NotFoundException if tasks is empty', async () => {
+      jest.spyOn(taskRepository, 'findAll').mockResolvedValueOnce([]);
+
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException(`No tasks found for tenant ID: ${tenantId}`),
+      );
+    });
   });
 });
