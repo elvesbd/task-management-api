@@ -49,5 +49,12 @@ describe('UpdateTenantUseCase', () => {
         new NotFoundException('Tenant not found!'),
       );
     });
+
+    it('should call tenantRepository save on success', async () => {
+      await sut.execute({ ...input, id: tenantId });
+
+      expect(tenantRepository.save).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.save).toHaveBeenCalledWith(expect.any(Tenant));
+    });
   });
 });
