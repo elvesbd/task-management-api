@@ -2,14 +2,14 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { Task } from '@core/task/model';
-import { UpdateTaskUseCase } from '@core/task/usecases';
+import { FindAllTaskUseCase } from '@core/task/usecases';
 import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 import { TaskDataBuilder } from '@test/__mocks__/data-builder/task';
 import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
 
-describe('UpdateTaskUseCase', () => {
-  let sut: UpdateTaskUseCase;
+describe('FindAllTaskUseCase', () => {
+  let sut: FindAllTaskUseCase;
   let taskRepository: TaskRepository;
   let tenantRepository: TenantRepository;
 
@@ -23,8 +23,7 @@ describe('UpdateTaskUseCase', () => {
     const TaskRepositoryProvider = {
       provide: TaskRepository,
       useValue: {
-        save: jest.fn(),
-        findByIdAndTenantId: jest.fn().mockResolvedValue(task),
+        findAll: jest.fn().mockResolvedValue([task]),
       },
     };
 
@@ -37,13 +36,13 @@ describe('UpdateTaskUseCase', () => {
 
     const app: TestingModule = await Test.createTestingModule({
       providers: [
-        UpdateTaskUseCase,
+        FindAllTaskUseCase,
         TaskRepositoryProvider,
         TenantRepositoryProvider,
       ],
     }).compile();
 
-    sut = app.get<UpdateTaskUseCase>(UpdateTaskUseCase);
+    sut = app.get<FindAllTaskUseCase>(FindAllTaskUseCase);
     taskRepository = app.get<TaskRepository>(TaskRepository);
     tenantRepository = app.get<TenantRepository>(TenantRepository);
   });
@@ -55,10 +54,10 @@ describe('UpdateTaskUseCase', () => {
   });
 
   describe('execute', () => {
-    const id = '019229dc-e8c6-22cc-b654-c938df401789';
+    const tenantId = '019229dc-e8c6-72cc-b599-c938df401967';
 
     it('should call tenantRepository findById once', async () => {
-      await sut.execute({ ...input, id });
+      await sut.execute(tenantId);
 
       expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
       expect(tenantRepository.findById).toHaveBeenCalledWith(input.tenantId);
@@ -67,50 +66,39 @@ describe('UpdateTaskUseCase', () => {
     it('should throw a NotFoundException if tenant is not found', async () => {
       jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
 
-      await expect(sut.execute({ ...input, id })).rejects.toThrow(
+      await expect(sut.execute(tenantId)).rejects.toThrow(
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
       );
     });
 
-    it('should call tenantRepository findByIdAndTenantId once', async () => {
-      await sut.execute({ ...input, id });
+    it('should call taskRepository find all once', async () => {
+      await sut.execute(tenantId);
 
-      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
-      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
-        id,
-        tenant.id,
+      expect(taskRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(taskRepository.findAll).toHaveBeenCalledWith(tenantId);
+    });
+
+    it('should throw a NotFoundException if no tasks found for tenant', async () => {
+      jest.spyOn(taskRepository, 'findAll').mockResolvedValueOnce(undefined);
+
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException(`No tasks found for tenant ID: ${tenantId}`),
       );
     });
 
-    it('should throw a NotFoundException if task not found', async () => {
-      jest
-        .spyOn(taskRepository, 'findByIdAndTenantId')
-        .mockResolvedValueOnce(null);
+    it('should throw a NotFoundException if tasks is empty', async () => {
+      jest.spyOn(taskRepository, 'findAll').mockResolvedValueOnce([]);
 
-      await expect(sut.execute({ ...input, id })).rejects.toThrow(
-        new NotFoundException('Task not found!'),
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException(`No tasks found for tenant ID: ${tenantId}`),
       );
     });
 
-    it('should call tenantRepository save once', async () => {
-      await sut.execute({ ...input, id });
+    it('should return all task on tenant', async () => {
+      const output = await sut.execute(tenantId);
 
-      expect(taskRepository.save).toHaveBeenCalledTimes(1);
-      expect(taskRepository.save).toHaveBeenCalledWith(task);
-    });
-
-    it('should update the title only', async () => {
-      const updateInput = TaskDataBuilder.aTask()
-        .withTitle('New Title')
-        .build();
-
-      const output = await sut.execute({ ...updateInput, id });
-
-      expect(output.id).toBe(task.id);
-      expect(output.title).toBe(updateInput.title);
-      expect(output.deadline).toBe(task.deadline);
-      expect(output.tenantId).toBe(task.tenantId);
-      expect(output.description).toBe(task.description);
+      expect(output).toHaveLength(1);
+      expect(output).toStrictEqual([task]);
     });
   });
 });
