@@ -51,5 +51,13 @@ describe('FindAllUserUseCase', () => {
         new NotFoundException(`No users found for tenant ID: ${tenantId}`),
       );
     });
+
+    it('should throw a NotFoundException if returns undefined', async () => {
+      jest.spyOn(userRepository, 'findAll').mockResolvedValueOnce(undefined);
+
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException(`No users found for tenant ID: ${tenantId}`),
+      );
+    });
   });
 });
