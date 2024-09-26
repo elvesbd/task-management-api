@@ -74,4 +74,14 @@ describe('UpdateTaskStatusUseCase', () => {
       new NotFoundException(`Tenant with ID ${input.tenantId} not found.`),
     );
   });
+
+  it('should call tenantRepository findById once', async () => {
+    await sut.execute(input);
+
+    expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
+    expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
+      input.taskId,
+      tenant.id,
+    );
+  });
 });
