@@ -60,5 +60,17 @@ describe('UpdateUserUseCase', () => {
         new NotFoundException('User not found!'),
       );
     });
+
+    it('should update the role only', async () => {
+      const updateInput = UserDataBuilder.aUser()
+        .withRole(UserRole.ADMIN)
+        .build();
+
+      await sut.execute({ ...updateInput, id });
+
+      expect(user.email).toBe(input.email);
+      expect(user.tenantId).toBe(input.tenantId);
+      expect(user.role).toBe(updateInput.role);
+    });
   });
 });
