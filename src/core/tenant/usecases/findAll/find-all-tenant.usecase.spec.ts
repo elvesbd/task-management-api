@@ -40,5 +40,13 @@ describe('FindAllTenantUseCase', () => {
       expect(tenantRepository.findAll).toHaveBeenCalledTimes(1);
       expect(tenantRepository.findAll).toHaveBeenCalledWith();
     });
+
+    it('should return an empty array if no tenants are found', async () => {
+      jest.spyOn(tenantRepository, 'findAll').mockResolvedValueOnce([]);
+
+      const output = await sut.execute();
+
+      expect(output).toHaveLength(0);
+    });
   });
 });
