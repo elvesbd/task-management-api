@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '@core/user/model';
 import { UserRole } from '@core/user/enum';
 import { UseCase } from '@core/shared/contracts/usecases';
 import { UserRepository } from '@core/user/ports/repository';
+import { TenantRepository } from '@core/tenant/ports/repository';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
 
 type Input = {
@@ -16,14 +17,14 @@ type Input = {
 export class CreateUserUseCase implements UseCase<Input, User> {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly tenantRepository: TenantRepository,
     private readonly passwordEncryption: PasswordEncryption,
   ) {}
 
   async execute(input: Input): Promise<User> {
-    const userExists = await this.userRepository.findByEmail(input.email);
-
-    if (userExists)
-      throw new BadRequestException('User already exists with this email!');
+    const tenant = await this.tenantRepository.findById(input.tenantId);
+    if (!tenant)
+      throw new NotFoundException(`Tenant not found for ID: ${input.tenantId}`);
 
     const hashedPassword = await this.passwordEncryption.hash(input.password);
 
