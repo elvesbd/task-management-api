@@ -9,7 +9,7 @@ describe('FindAllUserUseCase', () => {
   let sut: FindAllUserUseCase;
   let userRepository: UserRepository;
 
-  const tenant = UserDataBuilder.aUser().withId().build();
+  const user = UserDataBuilder.aUser().withId().build();
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -17,7 +17,7 @@ describe('FindAllUserUseCase', () => {
     const TenantRepositoryProvider = {
       provide: UserRepository,
       useValue: {
-        findAll: jest.fn().mockResolvedValue([tenant]),
+        findAll: jest.fn().mockResolvedValue([user]),
       },
     };
 
@@ -64,7 +64,7 @@ describe('FindAllUserUseCase', () => {
       const output = await sut.execute(tenantId);
 
       expect(output).toHaveLength(1);
-      expect(output).toStrictEqual([tenant]);
+      expect(output).toStrictEqual([user]);
     });
   });
 });
