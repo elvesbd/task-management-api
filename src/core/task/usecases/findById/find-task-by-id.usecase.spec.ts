@@ -81,5 +81,15 @@ describe('FindTaskByIdUseCase', () => {
         tenant.id,
       );
     });
+
+    it('should throw a NotFoundException if task not found', async () => {
+      jest
+        .spyOn(taskRepository, 'findByIdAndTenantId')
+        .mockResolvedValueOnce(null);
+
+      await expect(sut.execute(input)).rejects.toThrow(
+        new NotFoundException('Task not found!'),
+      );
+    });
   });
 });
