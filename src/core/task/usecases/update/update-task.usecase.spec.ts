@@ -71,5 +71,15 @@ describe('UpdateTaskUseCase', () => {
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
       );
     });
+
+    it('should call tenantRepository findByIdAndTenantId once', async () => {
+      await sut.execute({ ...input, id });
+
+      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
+      expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
+        id,
+        input.tenantId,
+      );
+    });
   });
 });
