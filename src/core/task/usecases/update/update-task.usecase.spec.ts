@@ -78,7 +78,7 @@ describe('UpdateTaskUseCase', () => {
       expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
       expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
         id,
-        input.tenantId,
+        tenant.id,
       );
     });
 
