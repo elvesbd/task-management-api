@@ -1,15 +1,19 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { DeleteUserUseCase } from '@core/user/usecases';
 import { UserRepository } from '@core/user/ports/repository';
+import { TenantRepository } from '@core/tenant/ports/repository';
 import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
-import { DeleteUserUseCase } from './delete-user.usecase';
+import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('DeleteUserUseCase', () => {
   let sut: DeleteUserUseCase;
   let userRepository: UserRepository;
+  let tenantRepository: TenantRepository;
 
   const user = UserDataBuilder.aUser().withId().build();
+  const tenant = TenantDataBuilder.anTenant().withId().build();
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -22,17 +26,30 @@ describe('DeleteUserUseCase', () => {
       },
     };
 
+    const TenantRepositoryProvider = {
+      provide: TenantRepository,
+      useValue: {
+        findById: jest.fn().mockResolvedValue(tenant),
+      },
+    };
+
     const app: TestingModule = await Test.createTestingModule({
-      providers: [DeleteUserUseCase, UserRepositoryProvider],
+      providers: [
+        DeleteUserUseCase,
+        UserRepositoryProvider,
+        TenantRepositoryProvider,
+      ],
     }).compile();
 
     sut = app.get<DeleteUserUseCase>(DeleteUserUseCase);
     userRepository = app.get<UserRepository>(UserRepository);
+    tenantRepository = app.get<TenantRepository>(TenantRepository);
   });
 
   it('should be defined', () => {
     expect(sut).toBeDefined();
     expect(userRepository).toBeDefined();
+    expect(tenantRepository).toBeDefined();
   });
 
   describe('execute', () => {
@@ -40,6 +57,21 @@ describe('DeleteUserUseCase', () => {
       id: '086229dc-e8c6-72cc-b599-c938df401741',
       tenantId: '019229dc-e8c6-72cc-b599-c938df401967',
     };
+
+    it('should call tenantRepository findById once', async () => {
+      await sut.execute(input);
+
+      expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.findById).toHaveBeenCalledWith(input.tenantId);
+    });
+
+    it('should throw a NotFoundException if tenant is not found', async () => {
+      jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
+
+      await expect(sut.execute(input)).rejects.toThrow(
+        new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
+      );
+    });
 
     it('should call userRepository findByIdAndTenantId once', async () => {
       await sut.execute(input);
@@ -67,7 +99,7 @@ describe('DeleteUserUseCase', () => {
       await sut.execute(input);
 
       expect(userRepository.delete).toHaveBeenCalledTimes(1);
-      expect(userRepository.delete).toHaveBeenCalledWith(input.id);
+      expect(userRepository.delete).toHaveBeenCalledWith(tenant.id);
     });
   });
 });
