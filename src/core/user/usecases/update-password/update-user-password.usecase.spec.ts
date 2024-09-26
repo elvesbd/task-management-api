@@ -77,5 +77,12 @@ describe('UpdateUserPasswordUseCase', () => {
         new BadRequestException('Current password is incorrect'),
       );
     });
+
+    it('should call passwordEncryption hash with correct values', async () => {
+      await sut.execute(input);
+
+      expect(passwordEncryption.hash).toHaveBeenCalledTimes(1);
+      expect(passwordEncryption.hash).toHaveBeenCalledWith(input.newPassword);
+    });
   });
 });
