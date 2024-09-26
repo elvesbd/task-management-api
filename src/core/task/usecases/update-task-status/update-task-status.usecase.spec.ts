@@ -96,4 +96,11 @@ describe('UpdateTaskStatusUseCase', () => {
       ),
     );
   });
+
+  it('should update task status if tenant exists', async () => {
+    await sut.execute(input);
+
+    expect(task.status).toBe(TaskStatus.COMPLETED);
+    expect(taskRepository.save).toHaveBeenCalledWith(task);
+  });
 });
