@@ -62,5 +62,12 @@ describe('DeleteUserUseCase', () => {
         ),
       );
     });
+
+    it('should call userRepository delete once when user is found', async () => {
+      await sut.execute(input);
+
+      expect(userRepository.delete).toHaveBeenCalledTimes(1);
+      expect(userRepository.delete).toHaveBeenCalledWith(input.id);
+    });
   });
 });
