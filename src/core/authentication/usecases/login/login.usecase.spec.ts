@@ -69,5 +69,13 @@ describe('LoginUseCase', () => {
         sut.execute({ email: 'notfound@example.com', password: 'password' }),
       ).rejects.toThrow(new UnauthorizedException('Invalid credentials'));
     });
+
+    it('should throw UnauthorizedException if password is incorrect', async () => {
+      jest.spyOn(passwordEncryption, 'compare').mockResolvedValueOnce(false);
+
+      await expect(
+        sut.execute({ email: user.email, password: 'wrongPassword' }),
+      ).rejects.toThrow(new UnauthorizedException('Invalid credentials'));
+    });
   });
 });
