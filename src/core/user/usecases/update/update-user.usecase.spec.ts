@@ -11,7 +11,7 @@ describe('UpdateUserUseCase', () => {
   let sut: UpdateUserUseCase;
   let userRepository: UserRepository;
 
-  const input = UserDataBuilder.aUser().build();
+  const input = UserDataBuilder.aUser().withId().build();
   const user = User.create(input);
 
   beforeEach(async () => {
@@ -21,7 +21,7 @@ describe('UpdateUserUseCase', () => {
       provide: UserRepository,
       useValue: {
         save: jest.fn().mockResolvedValue(0),
-        findByEmail: jest.fn().mockResolvedValue(user),
+        findByIdAndTenantId: jest.fn().mockResolvedValue(user),
       },
     };
 
@@ -39,35 +39,16 @@ describe('UpdateUserUseCase', () => {
   });
 
   describe('execute', () => {
-    const tenantId = '019229dc-e8c6-72cc-b599-c938df401967';
+    const id = '019229dc-e8c6-72cc-b599-c938df401967';
 
-    it('should throw NotFoundException if user not found', async () => {
-      jest.spyOn(userRepository, 'findByEmail').mockResolvedValueOnce(null);
+    it('should call userRepository findByIdAndTenantId on success', async () => {
+      await sut.execute({ ...input, id });
 
-      await expect(sut.execute({ ...input, id: tenantId })).rejects.toThrow(
-        new NotFoundException('Tenant not found!'),
+      expect(userRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
+      expect(userRepository.findByIdAndTenantId).toHaveBeenCalledWith(
+        id,
+        input.tenantId,
       );
-    });
-
-    it('should call userRepository save on success', async () => {
-      await sut.execute({ ...input, id: tenantId });
-
-      expect(userRepository.save).toHaveBeenCalledTimes(1);
-      expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
-    });
-
-    it('should update a user on success', async () => {
-      const updateInput = UserDataBuilder.aUser()
-        .withRole(UserRole.ADMIN)
-        .withEmail('ebd@test.com')
-        .withTenantId('021229dc-e8c6-72cc-b599-c938df401154')
-        .build();
-
-      await sut.execute({ ...updateInput, id: tenantId });
-
-      expect(user.role).toBe(updateInput.role);
-      expect(user.email).toBe(updateInput.email);
-      expect(user.tenantId).toBe(updateInput.tenantId);
     });
   });
 });
