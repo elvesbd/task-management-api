@@ -69,5 +69,13 @@ describe('UpdateUserPasswordUseCase', () => {
         new NotFoundException('User not found!'),
       );
     });
+
+    it('should throw BadRequestException if current password is incorrect', async () => {
+      jest.spyOn(passwordEncryption, 'compare').mockResolvedValueOnce(false);
+
+      await expect(sut.execute(input)).rejects.toThrow(
+        new BadRequestException('Current password is incorrect'),
+      );
+    });
   });
 });
