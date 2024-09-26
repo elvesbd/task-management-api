@@ -98,5 +98,19 @@ describe('UpdateTaskUseCase', () => {
       expect(taskRepository.save).toHaveBeenCalledTimes(1);
       expect(taskRepository.save).toHaveBeenCalledWith(task);
     });
+
+    it('should update the title only', async () => {
+      const updateInput = TaskDataBuilder.aTask()
+        .withTitle('New Title')
+        .build();
+
+      const output = await sut.execute({ ...updateInput, id });
+
+      expect(output.id).toBe(task.id);
+      expect(output.title).toBe(updateInput.title);
+      expect(output.deadline).toBe(task.deadline);
+      expect(output.tenantId).toBe(task.tenantId);
+      expect(output.description).toBe(task.description);
+    });
   });
 });
