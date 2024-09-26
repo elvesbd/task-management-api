@@ -43,5 +43,13 @@ describe('FindByIdTenantUseCase', () => {
       expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
       expect(tenantRepository.findById).toHaveBeenCalledWith(tenantId);
     });
+
+    it('should throw NotFoundException if no tenant is found', async () => {
+      jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
+
+      await expect(sut.execute(tenantId)).rejects.toThrow(
+        new NotFoundException('Tenant not found!'),
+      );
+    });
   });
 });
