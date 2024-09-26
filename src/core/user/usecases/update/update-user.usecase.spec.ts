@@ -5,14 +5,17 @@ import { User } from '@core/user/model';
 import { UserRole } from '@core/user/enum';
 import { UpdateUserUseCase } from '@core/user/usecases';
 import { UserRepository } from '@core/user/ports/repository';
+import { TenantRepository } from '@core/tenant/ports/repository';
 import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
 
 describe('UpdateUserUseCase', () => {
   let sut: UpdateUserUseCase;
   let userRepository: UserRepository;
+  let tenantRepository: TenantRepository;
 
   const input = UserDataBuilder.aUser().withId().build();
   const user = User.create(input);
+  const tenant = UserDataBuilder.aUser().withId().build();
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -25,21 +28,49 @@ describe('UpdateUserUseCase', () => {
       },
     };
 
+    const TenantRepositoryProvider = {
+      provide: TenantRepository,
+      useValue: {
+        findById: jest.fn().mockResolvedValue(tenant),
+      },
+    };
+
     const app: TestingModule = await Test.createTestingModule({
-      providers: [UpdateUserUseCase, UserRepositoryProvider],
+      providers: [
+        UpdateUserUseCase,
+        UserRepositoryProvider,
+        TenantRepositoryProvider,
+      ],
     }).compile();
 
     sut = app.get<UpdateUserUseCase>(UpdateUserUseCase);
     userRepository = app.get<UserRepository>(UserRepository);
+    tenantRepository = app.get<TenantRepository>(TenantRepository);
   });
 
   it('should be defined', () => {
     expect(sut).toBeDefined();
     expect(userRepository).toBeDefined();
+    expect(tenantRepository).toBeDefined();
   });
 
   describe('execute', () => {
     const id = '019229dc-e8c6-72cc-b599-c938df401967';
+
+    it('should call tenantRepository findById once', async () => {
+      await sut.execute({ ...input, id });
+
+      expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.findById).toHaveBeenCalledWith(input.tenantId);
+    });
+
+    it('should throw a NotFoundException if tenant is not found', async () => {
+      jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
+
+      await expect(sut.execute({ ...input, id })).rejects.toThrow(
+        new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
+      );
+    });
 
     it('should call userRepository findByIdAndTenantId on success', async () => {
       await sut.execute({ ...input, id });
@@ -47,7 +78,7 @@ describe('UpdateUserUseCase', () => {
       expect(userRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
       expect(userRepository.findByIdAndTenantId).toHaveBeenCalledWith(
         id,
-        input.tenantId,
+        tenant.id,
       );
     });
 
