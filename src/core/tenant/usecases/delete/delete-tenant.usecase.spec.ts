@@ -52,5 +52,12 @@ describe('DeleteTenantUseCase', () => {
         new NotFoundException('Tenant not found!'),
       );
     });
+
+    it('should call tenantRepository.delete with the correct tenantId', async () => {
+      await sut.execute(tenantId);
+
+      expect(tenantRepository.delete).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.delete).toHaveBeenCalledWith(tenantId);
+    });
   });
 });
