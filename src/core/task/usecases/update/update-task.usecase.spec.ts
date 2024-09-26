@@ -6,7 +6,7 @@ import { UpdateTaskUseCase } from '@core/task/usecases';
 import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 import { TaskDataBuilder } from '@test/__mocks__/data-builder/task';
-import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
+import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('UpdateTaskUseCase', () => {
   let sut: UpdateTaskUseCase;
@@ -15,7 +15,7 @@ describe('UpdateTaskUseCase', () => {
 
   const input = TaskDataBuilder.aTask().build();
   const task = Task.create(input);
-  const tenant = UserDataBuilder.aUser().withId().build();
+  const tenant = TenantDataBuilder.anTenant().withId().build();
 
   beforeEach(async () => {
     jest.clearAllMocks();
