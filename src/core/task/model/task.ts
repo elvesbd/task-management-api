@@ -6,7 +6,7 @@ export type TaskProps = {
   title: string;
   deadline: Date;
   tenantId: string;
-  status: TaskStatus;
+  status?: TaskStatus;
   description: string;
 };
 
