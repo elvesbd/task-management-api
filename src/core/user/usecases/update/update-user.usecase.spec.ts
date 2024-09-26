@@ -55,5 +55,19 @@ describe('UpdateUserUseCase', () => {
       expect(userRepository.save).toHaveBeenCalledTimes(1);
       expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
     });
+
+    it('should update a user on success', async () => {
+      const updateInput = UserDataBuilder.aUser()
+        .withRole(UserRole.ADMIN)
+        .withEmail('ebd@test.com')
+        .withTenantId('021229dc-e8c6-72cc-b599-c938df401154')
+        .build();
+
+      await sut.execute({ ...updateInput, id: tenantId });
+
+      expect(user.role).toBe(updateInput.role);
+      expect(user.email).toBe(updateInput.email);
+      expect(user.tenantId).toBe(updateInput.tenantId);
+    });
   });
 });
