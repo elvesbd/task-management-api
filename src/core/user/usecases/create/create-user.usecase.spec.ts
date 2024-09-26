@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { User } from '@core/user/model';
@@ -6,14 +6,18 @@ import { CreateUserUseCase } from '@core/user/usecases';
 import { UserRepository } from '@core/user/ports/repository';
 import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
+import { TenantRepository } from '@core/tenant/ports/repository';
+import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('CreateUserUseCase', () => {
   let sut: CreateUserUseCase;
   let userRepository: UserRepository;
+  let tenantRepository: TenantRepository;
   let passwordEncryption: PasswordEncryption;
 
   const input = UserDataBuilder.aUser().build();
   const user = User.create(input);
+  const tenant = TenantDataBuilder.anTenant().withId().build();
   const hashedPassword = 'hashedPassword';
 
   beforeEach(async () => {
@@ -22,8 +26,7 @@ describe('CreateUserUseCase', () => {
     const UserRepositoryProvider = {
       provide: UserRepository,
       useValue: {
-        findByEmail: jest.fn().mockResolvedValue(null),
-        save: jest.fn().mockResolvedValue(0),
+        save: jest.fn(),
       },
     };
 
@@ -34,32 +37,41 @@ describe('CreateUserUseCase', () => {
       },
     };
 
+    const TenantRepositoryProvider = {
+      provide: TenantRepository,
+      useValue: {
+        findById: jest.fn().mockResolvedValue(tenant),
+      },
+    };
+
     const app: TestingModule = await Test.createTestingModule({
       providers: [
         CreateUserUseCase,
         UserRepositoryProvider,
+        TenantRepositoryProvider,
         PasswordEncryptionProvider,
       ],
     }).compile();
 
     sut = app.get<CreateUserUseCase>(CreateUserUseCase);
     userRepository = app.get<UserRepository>(UserRepository);
+    tenantRepository = app.get<TenantRepository>(TenantRepository);
     passwordEncryption = app.get<PasswordEncryption>(PasswordEncryption);
   });
 
   it('should defined', () => {
     expect(sut).toBeDefined();
     expect(userRepository).toBeDefined();
+    expect(tenantRepository).toBeDefined();
     expect(passwordEncryption).toBeDefined();
   });
 
   describe('execute', () => {
-    it('should throw BadRequestException if user already exists', async () => {
-      jest.spyOn(userRepository, 'findByEmail').mockResolvedValueOnce(user);
+    it('should call tenantRepository findById once', async () => {
+      await sut.execute(input);
 
-      await expect(sut.execute(input)).rejects.toThrow(
-        new BadRequestException('User already exists with this email!'),
-      );
+      expect(tenantRepository.findById).toHaveBeenCalledTimes(1);
+      expect(tenantRepository.findById).toHaveBeenCalledWith(input.tenantId);
     });
 
     it('should hash the password before saving the user', async () => {

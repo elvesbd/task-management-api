@@ -5,8 +5,6 @@ import { CreateTaskUseCase } from '@core/task/usecases';
 import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 import { TaskDataBuilder } from '@test/__mocks__/data-builder/task';
-import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
-import { Task } from '@core/task/model';
 import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('CreateTaskUseCase', () => {
