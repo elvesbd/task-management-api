@@ -68,5 +68,15 @@ describe('CreateTaskUseCase', () => {
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
       );
     });
+
+    it('should create a task and return it when tenant is found', async () => {
+      const output = await sut.execute(input);
+
+      expect(output.id).toBeDefined();
+      expect(output.title).toBe(input.title);
+      expect(output.deadline).toBe(input.deadline);
+      expect(output.tenantId).toBe(input.tenantId);
+      expect(output.description).toBe(input.description);
+    });
   });
 });
