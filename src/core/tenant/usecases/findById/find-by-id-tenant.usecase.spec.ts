@@ -51,5 +51,11 @@ describe('FindByIdTenantUseCase', () => {
         new NotFoundException('Tenant not found!'),
       );
     });
+
+    it('should return the tenant if found', async () => {
+      const output = await sut.execute(tenantId);
+
+      expect(output).toStrictEqual(tenant);
+    });
   });
 });
