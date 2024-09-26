@@ -84,5 +84,19 @@ describe('UpdateUserUseCase', () => {
       expect(user.tenantId).toBe(input.tenantId);
       expect(user.email).toBe(updateInput.email);
     });
+
+    it('should update the role and email', async () => {
+      const updateInput = UserDataBuilder.aUser()
+        .withRole(UserRole.ADMIN)
+        .withEmail('ebd@test.com')
+        .withTenantId(input.tenantId)
+        .build();
+
+      await sut.execute({ ...updateInput, id });
+
+      expect(user.tenantId).toBe(input.tenantId);
+      expect(user.role).toBe(updateInput.role);
+      expect(user.email).toBe(updateInput.email);
+    });
   });
 });
