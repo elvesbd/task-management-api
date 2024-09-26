@@ -59,5 +59,11 @@ describe('FindByIdUserUseCase', () => {
         new NotFoundException(`User not found for ID: ${input.tenantId}`),
       );
     });
+
+    it('should return a user when found', async () => {
+      const output = await sut.execute(input);
+
+      expect(output).toStrictEqual(user);
+    });
   });
 });
