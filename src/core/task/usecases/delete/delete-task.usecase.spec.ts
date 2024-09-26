@@ -92,5 +92,12 @@ describe('DeleteTaskUseCase', () => {
         new NotFoundException('Task not found!'),
       );
     });
+
+    it('should call taskRepository delete once', async () => {
+      await sut.execute(input);
+
+      expect(taskRepository.delete).toHaveBeenCalledTimes(1);
+      expect(taskRepository.delete).toHaveBeenCalledWith(task.id);
+    });
   });
 });
