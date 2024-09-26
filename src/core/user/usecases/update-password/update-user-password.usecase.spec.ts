@@ -84,5 +84,12 @@ describe('UpdateUserPasswordUseCase', () => {
       expect(passwordEncryption.hash).toHaveBeenCalledTimes(1);
       expect(passwordEncryption.hash).toHaveBeenCalledWith(input.newPassword);
     });
+
+    it('should hash the new password and update the user', async () => {
+      await sut.execute(input);
+
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith(user);
+    });
   });
 });
