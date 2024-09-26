@@ -50,5 +50,15 @@ describe('UpdateUserUseCase', () => {
         input.tenantId,
       );
     });
+
+    it('should throw NotFoundException if user not found', async () => {
+      jest
+        .spyOn(userRepository, 'findByIdAndTenantId')
+        .mockResolvedValueOnce(null);
+
+      await expect(sut.execute({ ...input, id })).rejects.toThrow(
+        new NotFoundException('User not found!'),
+      );
+    });
   });
 });
