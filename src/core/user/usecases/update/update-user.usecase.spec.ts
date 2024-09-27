@@ -7,6 +7,7 @@ import { UpdateUserUseCase } from '@core/user/usecases';
 import { UserRepository } from '@core/user/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 import { UserDataBuilder } from '@test/__mocks__/data-builder/user';
+import { TenantDataBuilder } from '@test/__mocks__/data-builder/tenant';
 
 describe('UpdateUserUseCase', () => {
   let sut: UpdateUserUseCase;
@@ -15,7 +16,7 @@ describe('UpdateUserUseCase', () => {
 
   const input = UserDataBuilder.aUser().withId().build();
   const user = User.create(input);
-  const tenant = UserDataBuilder.aUser().withId().build();
+  const tenant = TenantDataBuilder.anTenant().withId().build();
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -120,7 +121,6 @@ describe('UpdateUserUseCase', () => {
       const updateInput = UserDataBuilder.aUser()
         .withRole(UserRole.ADMIN)
         .withEmail('ebd@test.com')
-        .withTenantId(input.tenantId)
         .build();
 
       await sut.execute({ ...updateInput, id });
@@ -135,6 +135,21 @@ describe('UpdateUserUseCase', () => {
 
       expect(userRepository.save).toHaveBeenCalledTimes(1);
       expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
+    });
+
+    it('should return an user updated on success', async () => {
+      const updateInput = UserDataBuilder.aUser()
+        .withRole(UserRole.ADMIN)
+        .withEmail('ebd@test.com')
+        .withTenantId('020229dc-e8c6-72cc-b599-c938df401154')
+        .build();
+
+      const output = await sut.execute({ ...updateInput, id });
+
+      expect(output.id).toBe(user.id);
+      expect(output.role).toBe(user.role);
+      expect(output.email).toBe(user.email);
+      expect(output.tenantId).toBe(user.tenantId);
     });
   });
 });

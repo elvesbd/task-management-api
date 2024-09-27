@@ -8,16 +8,11 @@ type Input = {
   name: string;
   document: string;
 };
-
-type Output = {
-  tenantId: string;
-};
-
 @Injectable()
-export class CreateTenantUseCase implements UseCase<Input, Output> {
+export class CreateTenantUseCase implements UseCase<Input, Tenant> {
   constructor(private readonly tenantRepository: TenantRepository) {}
 
-  async execute(input: Input): Promise<Output> {
+  async execute(input: Input): Promise<Tenant> {
     const tenantExists = await this.tenantRepository.findByDocument(
       input.document,
     );
@@ -28,6 +23,6 @@ export class CreateTenantUseCase implements UseCase<Input, Output> {
     const tenant = Tenant.create(input);
     await this.tenantRepository.save(tenant);
 
-    return { tenantId: tenant.id };
+    return tenant;
   }
 }

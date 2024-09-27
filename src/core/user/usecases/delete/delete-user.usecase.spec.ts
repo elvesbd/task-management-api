@@ -99,7 +99,7 @@ describe('DeleteUserUseCase', () => {
       await sut.execute(input);
 
       expect(userRepository.delete).toHaveBeenCalledTimes(1);
-      expect(userRepository.delete).toHaveBeenCalledWith(tenant.id);
+      expect(userRepository.delete).toHaveBeenCalledWith(user.id);
     });
   });
 });

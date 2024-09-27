@@ -19,7 +19,7 @@ describe('CreateTenantUseCase', () => {
     const TenantRepositoryProvider = {
       provide: TenantRepository,
       useValue: {
-        save: jest.fn().mockResolvedValue(0),
+        save: jest.fn(),
         findByDocument: jest.fn().mockResolvedValue(null),
       },
     };
@@ -55,11 +55,12 @@ describe('CreateTenantUseCase', () => {
       expect(tenantRepository.save).toHaveBeenCalledWith(expect.any(Tenant));
     });
 
-    it('should return a tenant id on success', async () => {
+    it('should return a tenant on success', async () => {
       const output = await sut.execute(input);
 
-      expect(output).toBeDefined();
-      expect(output.tenantId).toHaveLength(36);
+      expect(output.id).toBeDefined();
+      expect(output.name).toBe(input.name);
+      expect(output.document).toBe(input.document);
     });
   });
 });
