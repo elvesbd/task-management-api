@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param } from '@nestjs/common';
 import {
   ApiTags,
-  ApiBody,
   ApiParam,
   ApiOperation,
   ApiOkResponse,
@@ -10,7 +9,10 @@ import {
 
 import { ApiPath, ApiTag } from '../constants';
 import { FindByIdUserUseCase } from '@core/user/usecases';
-import { UserViewModel } from '@infra/http/presenters/view-models/user';
+import {
+  UserViewModel,
+  UserVMResponse,
+} from '@infra/http/presenters/view-models/user';
 
 type FindByIdUserDto = {
   tenantId: string;
@@ -30,13 +32,9 @@ export class FindUserByIdController {
     description: 'ID of the user to be found.',
     type: String,
   })
-  @ApiBody({
-    type: String,
-    description: 'User ID and Tenant ID.',
-  })
   @ApiOkResponse({
     description: 'User found successfully.',
-    type: UserViewModel,
+    type: UserVMResponse,
   })
   @ApiNotFoundResponse({
     description: 'Tenant or User not found.',

@@ -11,7 +11,6 @@ import { TenantRepository } from '@core/tenant/ports/repository';
 
 type Input = {
   id: string;
-  email: string;
   tenantId: string;
   newPassword: string;
   currentPassword: string;
