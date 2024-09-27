@@ -51,6 +51,7 @@ import { TenantRepository } from '@core/tenant/ports/repository';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
 import { AppHealthController } from '@infra/http/presenters/controllers/health-check';
 import { AuthModule } from '@infra/auth';
+import { UpdateTenantController } from './presenters/controllers/tenant/update/update-tenant.controller';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -210,6 +211,7 @@ import { AuthModule } from '@infra/auth';
     DeleteTenantController,
     FindAllTenantsController,
     FindByIdTenantController,
+    UpdateTenantController,
     CreateUserController,
     DeleteUserController,
     UpdateUserController,

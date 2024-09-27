@@ -11,6 +11,10 @@ import {
 import { ApiPath, ApiTag } from '../constants';
 import { UpdateTenantUseCase } from '@core/tenant/usecases';
 import { UpdateTenantDto } from '@infra/http/presenters/controllers/tenant/dtos';
+import {
+  TenantViewModel,
+  TenantVMResponse,
+} from '@infra/http/presenters/view-models/tenant';
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
@@ -40,10 +44,12 @@ export class UpdateTenantController {
   public async updateTenant(
     @Param('id') id: string,
     @Body() dto: UpdateTenantDto,
-  ): Promise<void> {
-    await this.updateTenantUseCase.execute({
+  ): Promise<TenantVMResponse> {
+    const tenant = await this.updateTenantUseCase.execute({
       id,
       ...dto,
     });
+
+    return TenantViewModel.toHTTP(tenant);
   }
 }
