@@ -36,7 +36,7 @@ export class FindByIdTenantController {
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
   })
-  @Get('tenants/:id')
+  @Get(':id')
   public async findByIdTenant(
     @Param('id') id: string,
   ): Promise<TenantVMResponse> {

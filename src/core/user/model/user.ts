@@ -37,7 +37,7 @@ export class User extends Entity<UserProps> {
     this._password = hashedPassword;
   }
 
-  get role(): string {
+  get role(): UserRole {
     return this._role;
   }
 

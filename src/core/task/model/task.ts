@@ -27,7 +27,7 @@ export class Task extends Entity<TaskProps> {
   }
 
   static create(props: TaskProps): Task {
-    const status = TaskStatus.INPROGRESS;
+    const status = TaskStatus.PENDING;
     return new Task({ ...props, status });
   }
 

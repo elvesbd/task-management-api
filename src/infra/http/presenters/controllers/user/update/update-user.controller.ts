@@ -40,7 +40,7 @@ export class UpdateUserController {
   @ApiNotFoundResponse({
     description: 'Tenant or User not found.',
   })
-  @Patch('user/:id')
+  @Patch(':id')
   public async updateUser(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,

@@ -25,7 +25,7 @@ export class FindAllTasksController {
     description: 'Tasks retrieved successfully.',
     type: [TaskViewModel],
   })
-  @Get('/tasks')
+  @Get()
   public async findAllTasks(
     @Body() dto: { tenantId: string },
   ): Promise<TaskViewModel[]> {

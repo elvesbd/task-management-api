@@ -41,7 +41,7 @@ export class UpdateUserPasswordController {
   @ApiBadRequestResponse({
     description: 'Current password is incorrect.',
   })
-  @Patch('users/:id/password')
+  @Patch(':id/password')
   public async updateUserPassword(
     @Param('id') id: string,
     @Body() dto: UpdateUserPasswordDto,

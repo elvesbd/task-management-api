@@ -30,7 +30,7 @@ export class DeleteTenantController {
   @ApiNoContentResponse({
     description: 'Tenant deleted successfully.',
   })
-  @Delete('tenants/:id')
+  @Delete(':id')
   public async deleteTenant(@Param('id') id: string): Promise<void> {
     await this.deleteTenantUseCase.execute(id);
   }
