@@ -27,7 +27,7 @@ describe('Task Model', () => {
       expect(task.title).toBe(props.title);
       expect(task.deadline).toEqual(props.deadline);
       expect(task.tenantId).toBe(props.tenantId);
-      expect(task.status).toBe(TaskStatus.INPROGRESS);
+      expect(task.status).toBe(TaskStatus.PENDING);
       expect(task.description).toBe(props.description);
     });
   });
