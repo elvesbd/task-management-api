@@ -1,1 +1,1 @@
-export * from './create/create-user-view-model';
+export * from './user-view-model';

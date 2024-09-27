@@ -7,13 +7,13 @@ import {
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
+import {
+  UserViewModel,
+  UserVMResponse,
+} from '@infra/http/presenters/view-models/user';
 import { ApiPath, ApiTag } from '../constants';
 import { CreateUserUseCase } from '@core/user/usecases';
-import {
-  CreateUserDto,
-  CreateUserResponseDto,
-} from '@infra/http/presenters/controllers/user/dtos/create';
-import { CreateUserViewModel } from '@infra/http/presenters/view-models/user';
+import { CreateUserDto } from '@infra/http/presenters/controllers/user/dtos';
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
@@ -29,17 +29,15 @@ export class CreateUserController {
   })
   @ApiCreatedResponse({
     description: 'User created successfully.',
-    type: CreateUserResponseDto,
+    type: UserVMResponse,
   })
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
   })
   @Post('create')
-  public async createUser(
-    @Body() dto: CreateUserDto,
-  ): Promise<CreateUserResponseDto> {
+  public async createUser(@Body() dto: CreateUserDto): Promise<UserVMResponse> {
     const user = await this.createUserUseCase.execute(dto);
 
-    return CreateUserViewModel.toHTTP(user);
+    return UserViewModel.toHTTP(user);
   }
 }
