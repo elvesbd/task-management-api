@@ -18,7 +18,7 @@ type FindByIdUserDto = {
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
-export class FindByIdUserController {
+export class FindUserByIdController {
   constructor(private readonly findByIdUserUseCase: FindByIdUserUseCase) {}
 
   @ApiOperation({
