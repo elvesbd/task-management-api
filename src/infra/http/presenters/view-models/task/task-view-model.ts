@@ -1,24 +1,42 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Task } from '@core/task/model';
 import { BaseViewModel } from '@infra/http/presenters/view-models/base.view-model';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class TaskVMResponse {
-  @ApiProperty()
+  @ApiProperty({
+    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
+    description: 'O UUID da task.',
+  })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Nova Tarefa',
+    description: 'O título da tarefa.',
+  })
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Concluída',
+    description: 'O status da tarefa dentro do sistema.',
+  })
   status: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Descrição detalhada da tarefa.',
+    description: 'A descrição da tarefa.',
+  })
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '2024-09-30T23:59:59Z',
+    description: 'Data limite para a conclusão da tarefa.',
+  })
   deadline: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
+    description: 'O UUID do inquilino ao qual a tarefa pertence.',
+  })
   tenantId: string;
 }
 

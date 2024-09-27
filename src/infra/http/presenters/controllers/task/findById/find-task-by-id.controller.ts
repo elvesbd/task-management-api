@@ -10,7 +10,10 @@ import {
 
 import { ApiPath, ApiTag } from '../constants';
 import { FindTaskByIdUseCase } from '@core/task/usecases';
-import { TaskViewModel } from '@infra/http/presenters/view-models/task';
+import {
+  TaskViewModel,
+  TaskVMResponse,
+} from '@infra/http/presenters/view-models/task';
 
 type FindByIdTaskDto = {
   tenantId: string;
@@ -30,13 +33,9 @@ export class FindTaskByIdController {
     description: 'ID of the task to be found.',
     type: String,
   })
-  @ApiBody({
-    type: String,
-    description: 'Task ID and Tenant ID.',
-  })
   @ApiOkResponse({
     description: 'Task found successfully.',
-    type: TaskViewModel,
+    type: TaskVMResponse,
   })
   @ApiNotFoundResponse({
     description: 'Tenant or Task not found.',
@@ -45,7 +44,7 @@ export class FindTaskByIdController {
   public async findByIdTask(
     @Param('id') id: string,
     @Body() dto: FindByIdTaskDto,
-  ): Promise<TaskViewModel> {
+  ): Promise<TaskVMResponse> {
     const task = await this.findTaskByIdUseCase.execute({ ...dto, id });
 
     return TaskViewModel.toHTTP(task);

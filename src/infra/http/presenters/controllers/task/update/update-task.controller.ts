@@ -36,6 +36,7 @@ export class UpdateTaskController {
   })
   @ApiOkResponse({
     description: 'Task updated successfully.',
+    type: [TaskVMResponse],
   })
   @ApiNotFoundResponse({
     description: 'Tenant or Task not found.',

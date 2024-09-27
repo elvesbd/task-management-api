@@ -35,6 +35,7 @@ import {
   UpdateUserController,
   FindAllUsersController,
   FindUserByIdController,
+  UpdateUserPasswordController,
 } from '@infra/http/presenters/controllers/user';
 import {
   CreateTaskController,
@@ -212,6 +213,7 @@ import { AuthModule } from '@infra/auth';
     CreateUserController,
     DeleteUserController,
     UpdateUserController,
+    UpdateUserPasswordController,
     FindAllUsersController,
     FindUserByIdController,
     CreateTaskController,
