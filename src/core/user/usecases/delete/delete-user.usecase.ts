@@ -30,6 +30,6 @@ export class DeleteUserUseCase implements UseCase<Input, void> {
       throw new NotFoundException(`User not found for tenant ID: ${tenant.id}`);
     }
 
-    await this.userRepository.delete(tenant.id);
+    await this.userRepository.delete(user.id);
   }
 }
