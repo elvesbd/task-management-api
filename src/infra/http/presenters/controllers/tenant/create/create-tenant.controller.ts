@@ -29,7 +29,7 @@ export class CreateTenantController {
   })
   @ApiCreatedResponse({
     description: 'Tenant created successfully.',
-    type: TenantViewModel,
+    type: TenantVMResponse,
   })
   @ApiBadRequestResponse({
     description: 'Bad Request. Tenant already exists with this document.',
