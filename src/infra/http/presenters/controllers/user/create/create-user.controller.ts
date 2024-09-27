@@ -5,6 +5,7 @@ import {
   ApiOperation,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiConflictResponse,
 } from '@nestjs/swagger';
 
 import {
@@ -33,6 +34,9 @@ export class CreateUserController {
   })
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
+  })
+  @ApiConflictResponse({
+    description: 'User already register.',
   })
   @Post()
   public async createUser(@Body() dto: CreateUserDto): Promise<UserVMResponse> {

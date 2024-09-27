@@ -1,12 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  Length,
-} from 'class-validator';
-import { UserRole } from '@core/user/enum';
+import { IsEmail, IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -25,16 +17,6 @@ export class CreateUserDto {
     description: 'A senha do usuário, com no mínimo 8 caracteres.',
   })
   password: string;
-
-  @IsEnum(UserRole, {
-    message: 'O valor do campo role deve ser um dos valores permitidos.',
-  })
-  @ApiProperty({
-    example: 'admin',
-    description: 'O papel (role) do usuário dentro do sistema.',
-    enum: UserRole,
-  })
-  role: UserRole;
 
   @IsUUID(7)
   @IsNotEmpty()
