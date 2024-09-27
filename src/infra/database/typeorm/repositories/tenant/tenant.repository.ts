@@ -14,8 +14,10 @@ export class TypeORMTenantRepository implements TenantRepository {
   constructor() {
     this.repository = dataSource.getRepository(TypeORMTenantEntity);
   }
-  findByDocument(document: string): Promise<Tenant | null> {
-    throw new Error('Method not implemented.');
+
+  async findByDocument(document: string): Promise<Tenant | null> {
+    const tenantEntity = await this.repository.findOne({ where: { document } });
+    return tenantEntity ? TypeORMTenantMapper.toDomain(tenantEntity) : null;
   }
 
   public async save(tenant: Tenant): Promise<void> {
