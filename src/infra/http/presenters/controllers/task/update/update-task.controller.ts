@@ -40,7 +40,7 @@ export class UpdateTaskController {
   @ApiNotFoundResponse({
     description: 'Tenant or Task not found.',
   })
-  @Patch('task/:id')
+  @Patch(':id')
   public async updateTask(
     @Param('id') id: string,
     @Body() dto: UpdateTaskDto,

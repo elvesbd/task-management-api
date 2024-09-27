@@ -25,7 +25,7 @@ export class FindAllUsersController {
     description: 'Users retrieved successfully.',
     type: [UserViewModel],
   })
-  @Get('/users')
+  @Get()
   public async findAllUsers(
     @Body() dto: { tenantId: string },
   ): Promise<UserViewModel[]> {

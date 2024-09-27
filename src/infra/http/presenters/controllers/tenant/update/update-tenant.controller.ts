@@ -36,7 +36,7 @@ export class UpdateTenantController {
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
   })
-  @Patch('tenants/:id')
+  @Patch(':id')
   public async updateTenant(
     @Param('id') id: string,
     @Body() dto: UpdateTenantDto,

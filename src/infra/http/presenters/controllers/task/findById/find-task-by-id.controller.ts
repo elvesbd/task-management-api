@@ -41,7 +41,7 @@ export class FindTaskByIdController {
   @ApiNotFoundResponse({
     description: 'Tenant or Task not found.',
   })
-  @Get('tasks/:id')
+  @Get(':id')
   public async findByIdTask(
     @Param('id') id: string,
     @Body() dto: FindByIdTaskDto,

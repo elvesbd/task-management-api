@@ -2,10 +2,10 @@ import { Body, Controller, Get, Param } from '@nestjs/common';
 import {
   ApiTags,
   ApiBody,
+  ApiParam,
   ApiOperation,
   ApiOkResponse,
   ApiNotFoundResponse,
-  ApiParam,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
@@ -41,7 +41,7 @@ export class FindUserByIdController {
   @ApiNotFoundResponse({
     description: 'Tenant or User not found.',
   })
-  @Get('users/:id')
+  @Get(':id')
   public async findByIdUser(
     @Param('id') id: string,
     @Body() dto: FindByIdUserDto,

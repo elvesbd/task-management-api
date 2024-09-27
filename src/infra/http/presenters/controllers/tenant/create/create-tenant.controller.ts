@@ -34,7 +34,7 @@ export class CreateTenantController {
   @ApiBadRequestResponse({
     description: 'Bad Request. Tenant already exists with this document.',
   })
-  @Post('/tenants')
+  @Post()
   public async createTenant(
     @Body() dto: CreateTenantDto,
   ): Promise<TenantVMResponse> {

@@ -34,7 +34,7 @@ export class CreateUserController {
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
   })
-  @Post('create')
+  @Post()
   public async createUser(@Body() dto: CreateUserDto): Promise<UserVMResponse> {
     const user = await this.createUserUseCase.execute(dto);
 

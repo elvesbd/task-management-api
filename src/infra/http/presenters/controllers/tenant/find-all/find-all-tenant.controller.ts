@@ -21,7 +21,7 @@ export class FindAllTenantsController {
     description: 'Tenants retrieved successfully.',
     type: [Tenant],
   })
-  @Get('tenants')
+  @Get()
   public async findAllTenants(): Promise<TenantVMResponse[]> {
     const tenants = await this.findAllTenantUseCase.execute();
 

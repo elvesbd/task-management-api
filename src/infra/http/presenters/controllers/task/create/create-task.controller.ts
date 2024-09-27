@@ -34,7 +34,7 @@ export class CreateTaskController {
   @ApiNotFoundResponse({
     description: 'Tenant not found.',
   })
-  @Post('create')
+  @Post()
   public async createTask(@Body() dto: CreateTaskDto): Promise<TaskVMResponse> {
     const task = await this.createTaskUseCase.execute(dto);
 
