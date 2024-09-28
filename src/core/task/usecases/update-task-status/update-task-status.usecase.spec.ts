@@ -14,7 +14,7 @@ describe('UpdateTaskStatusUseCase', () => {
   let tenantRepository: TenantRepository;
 
   const input = {
-    taskId: '123',
+    id: '123',
     tenantId: 'tenant1',
     status: TaskStatus.COMPLETED,
   };
@@ -80,7 +80,7 @@ describe('UpdateTaskStatusUseCase', () => {
 
     expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledTimes(1);
     expect(taskRepository.findByIdAndTenantId).toHaveBeenCalledWith(
-      input.taskId,
+      input.id,
       tenant.id,
     );
   });
@@ -92,7 +92,7 @@ describe('UpdateTaskStatusUseCase', () => {
 
     await expect(sut.execute(input)).rejects.toThrow(
       new NotFoundException(
-        `Task with ID ${input.taskId} not found for this tenant.`,
+        `Task with ID ${input.id} not found for this tenant.`,
       ),
     );
   });

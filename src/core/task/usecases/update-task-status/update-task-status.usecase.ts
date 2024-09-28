@@ -19,7 +19,6 @@ export class UpdateTaskStatusUseCase {
 
   async execute(input: Input): Promise<void> {
     const { id, tenantId, status } = input;
-    console.log({ id, tenantId, status });
 
     const tenant = await this.tenantRepository.findById(tenantId);
     if (!tenant)

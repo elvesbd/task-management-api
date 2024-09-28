@@ -15,8 +15,6 @@ export class UpdateTenantUseCase implements UseCase<Input, Tenant> {
   constructor(private readonly tenantRepository: TenantRepository) {}
 
   async execute(input: Input): Promise<Tenant> {
-    console.log(input);
-
     const tenant = await this.tenantRepository.findById(input.id);
 
     if (!tenant) throw new NotFoundException('Tenant not found!');
