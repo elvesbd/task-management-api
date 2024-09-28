@@ -1,20 +1,7 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserPasswordDto {
-  @IsUUID(7)
-  @ApiProperty({
-    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
-    description: 'O UUID do inquilino ao qual o usuário pertence.',
-  })
-  tenantId: string;
-
   @IsString()
   @IsOptional()
   @Length(8, 128, {

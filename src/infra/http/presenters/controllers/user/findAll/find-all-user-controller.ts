@@ -1,8 +1,9 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiOkResponse,
+  ApiBearerAuth,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
@@ -12,7 +13,9 @@ import {
   UserViewModel,
   UserVMResponse,
 } from '@infra/http/presenters/view-models/user';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class FindAllUsersController {
@@ -30,9 +33,8 @@ export class FindAllUsersController {
   })
   @Get()
   public async findAllUsers(
-    @Body() dto: { tenantId: string },
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<UserVMResponse[]> {
-    const { tenantId } = dto;
     const users = await this.findAllUserUseCase.execute(tenantId);
 
     return UserViewModel.toHTTPList(users);

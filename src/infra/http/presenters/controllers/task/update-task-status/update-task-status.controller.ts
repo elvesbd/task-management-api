@@ -1,25 +1,28 @@
 import {
   Body,
-  Controller,
-  Param,
   Put,
+  Param,
   HttpCode,
+  Controller,
   HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
-  ApiOperation,
-  ApiParam,
-  ApiNotFoundResponse,
-  ApiOkResponse,
   ApiBody,
+  ApiParam,
+  ApiOperation,
+  ApiOkResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
-import { UpdateTaskStatusUseCase } from '@core/task/usecases';
 import { UpdateTaskStatusDto } from '../dtos';
 import { TaskStatus } from '@core/task/enum';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
+import { UpdateTaskStatusUseCase } from '@core/task/usecases';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class UpdateTaskStatusController {
@@ -52,12 +55,12 @@ export class UpdateTaskStatusController {
   public async updateTaskStatus(
     @Param('id') id: string,
     @Body() dto: UpdateTaskStatusDto,
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<void> {
-    const tenantId = '019235bc-a54b-7117-98ba-9c6a2c4b2e2f';
     await this.updateTaskStatusUseCase.execute({
+      ...dto,
       id,
       tenantId,
-      ...dto,
     });
   }
 }

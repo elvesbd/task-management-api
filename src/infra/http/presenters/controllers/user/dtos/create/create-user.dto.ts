@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -17,12 +17,4 @@ export class CreateUserDto {
     description: 'A senha do usuário, com no mínimo 8 caracteres.',
   })
   password: string;
-
-  @IsUUID(7)
-  @IsNotEmpty()
-  @ApiProperty({
-    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
-    description: 'O UUID do inquilino ao qual o usuário pertence.',
-  })
-  tenantId: string;
 }

@@ -72,9 +72,17 @@ import { AppHealthController } from '@infra/http/presenters/controllers/health-c
     },
     {
       provide: CreateTenantUseCase,
-      useFactory: (tenantRepository: TenantRepository): CreateTenantUseCase =>
-        new CreateTenantUseCase(tenantRepository),
-      inject: [TenantRepository],
+      useFactory: (
+        userRepository: UserRepository,
+        tenantRepository: TenantRepository,
+        passwordEncryption: PasswordEncryption,
+      ): CreateTenantUseCase =>
+        new CreateTenantUseCase(
+          userRepository,
+          tenantRepository,
+          passwordEncryption,
+        ),
+      inject: [UserRepository, TenantRepository, PasswordEncryption],
     },
     {
       provide: DeleteTenantUseCase,

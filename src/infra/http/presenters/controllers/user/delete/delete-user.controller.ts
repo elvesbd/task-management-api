@@ -1,15 +1,24 @@
-import { Body, Controller, Delete, Param } from '@nestjs/common';
+import {
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Controller,
+} from '@nestjs/common';
 import {
   ApiTags,
+  ApiParam,
   ApiOperation,
   ApiNotFoundResponse,
   ApiUnauthorizedResponse,
-  ApiParam,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
 import { DeleteUserUseCase } from '@core/user/usecases';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class DeleteUserController {
@@ -30,16 +39,12 @@ export class DeleteUserController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized to perform this operation.',
   })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   public async deleteUser(
     @Param('id') id: string,
-    @Body() body: { tenantId: string },
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<void> {
-    const input = {
-      id,
-      tenantId: body.tenantId,
-    };
-
-    await this.deleteUserUseCase.execute(input);
+    await this.deleteUserUseCase.execute({ id, tenantId });
   }
 }

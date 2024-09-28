@@ -6,6 +6,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiConflictResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import {
@@ -15,7 +16,9 @@ import {
 import { ApiPath, ApiTag } from '../constants';
 import { CreateUserUseCase } from '@core/user/usecases';
 import { CreateUserDto } from '@infra/http/presenters/controllers/user/dtos';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class CreateUserController {
@@ -39,8 +42,11 @@ export class CreateUserController {
     description: 'User already register.',
   })
   @Post()
-  public async createUser(@Body() dto: CreateUserDto): Promise<UserVMResponse> {
-    const user = await this.createUserUseCase.execute(dto);
+  public async createUser(
+    @Body() dto: CreateUserDto,
+    @GetCurrentTenantId() tenantId: string,
+  ): Promise<UserVMResponse> {
+    const user = await this.createUserUseCase.execute({ ...dto, tenantId });
 
     return UserViewModel.toHTTP(user);
   }

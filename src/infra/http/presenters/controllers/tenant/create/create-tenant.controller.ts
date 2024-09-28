@@ -14,7 +14,9 @@ import {
   TenantVMResponse,
 } from '@infra/http/presenters/view-models/tenant';
 import { CreateTenantDto } from '@infra/http/presenters/controllers/tenant/dtos';
+import { Public } from '@infra/auth/decorators';
 
+@Public()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class CreateTenantController {

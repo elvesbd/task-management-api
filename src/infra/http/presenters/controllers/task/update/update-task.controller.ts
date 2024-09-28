@@ -1,11 +1,12 @@
 import { Body, Controller, Patch, Param } from '@nestjs/common';
 import {
   ApiTags,
-  ApiOperation,
   ApiBody,
   ApiParam,
-  ApiNotFoundResponse,
+  ApiOperation,
   ApiOkResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
 import {
@@ -14,8 +15,10 @@ import {
 } from '@infra/http/presenters/view-models/task';
 import { ApiPath, ApiTag } from '../constants';
 import { UpdateTaskUseCase } from '@core/task/usecases';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 import { UpdateTaskDto } from '@infra/http/presenters/controllers/task/dtos';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class UpdateTaskController {
@@ -45,10 +48,12 @@ export class UpdateTaskController {
   public async updateTask(
     @Param('id') id: string,
     @Body() dto: UpdateTaskDto,
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<TaskVMResponse> {
     const task = await this.updateTaskUseCase.execute({
-      id,
       ...dto,
+      id,
+      tenantId,
     });
 
     return TaskViewModel.toHTTP(task);

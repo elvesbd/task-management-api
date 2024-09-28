@@ -24,7 +24,7 @@ export class User extends Entity<UserProps> {
   }
 
   static create(props: UserProps): User {
-    const role = UserRole.USER;
+    const role = props.role ? props.role : UserRole.USER;
     return new User({ ...props, role });
   }
 
