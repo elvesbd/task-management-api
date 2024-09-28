@@ -70,16 +70,16 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo:
     MYSQL_PASSWORD=BeIFT10>@x
    ```
 
-4. **Rodar as migrations:**
-
-   ```bash
-   npm run migration:run
-   ```
-
-5. **Subir o container do banco de dados com Docker Compose:**
+4. **Subir o container do banco de dados com Docker Compose:**
 
    ```bash
    docker-compose up -d
+   ```
+
+5. **Rodar as migrations:**
+
+   ```bash
+   npm run migration:run
    ```
 
 6. **Executar a aplicação:**
