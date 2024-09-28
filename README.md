@@ -87,3 +87,9 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo:
    ```bash
    npm start
    ```
+
+## Cadastro de Empresa e Usuário Admin
+
+Após rodar o projeto, é necessário cadastrar uma empresa utilizando o endpoint `POST /tenants`. Ao cadastrar a primeira empresa, um usuário Admin será criado automaticamente para essa empresa, e você estará autorizado a acessar as funcionalidades da API.
+
+**Importante:** Para acessar os recursos, é necessário enviar o token gerado no login (endpoint `POST /auth/login`)
