@@ -4,7 +4,7 @@ import { UserRole } from '@core/user/enum';
 export type UserProps = {
   id?: string;
   email: string;
-  role: UserRole;
+  role?: UserRole;
   password: string;
   tenantId: string;
 };
@@ -24,7 +24,8 @@ export class User extends Entity<UserProps> {
   }
 
   static create(props: UserProps): User {
-    return new User(props);
+    const role = props.role ? props.role : UserRole.USER;
+    return new User({ ...props, role });
   }
 
   public update(props: Pick<UserProps, 'role' | 'email' | 'tenantId'>): void {

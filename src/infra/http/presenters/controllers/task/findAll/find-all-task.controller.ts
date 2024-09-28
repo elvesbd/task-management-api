@@ -1,9 +1,10 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
@@ -12,7 +13,8 @@ import {
   TaskViewModel,
   TaskVMResponse,
 } from '@infra/http/presenters/view-models/task';
-
+import { GetCurrentTenantId } from '@infra/auth/decorators';
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class FindAllTasksController {
@@ -30,9 +32,8 @@ export class FindAllTasksController {
   })
   @Get()
   public async findAllTasks(
-    @Body() dto: { tenantId: string },
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<TaskVMResponse[]> {
-    const { tenantId } = dto;
     const tasks = await this.findAllTaskUseCase.execute(tenantId);
 
     return TaskViewModel.toHTTPList(tasks);

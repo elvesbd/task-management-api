@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import {
   ApiTags,
-  ApiBody,
+  ApiParam,
   ApiOperation,
   ApiOkResponse,
   ApiNotFoundResponse,
-  ApiParam,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
@@ -14,11 +14,9 @@ import {
   TaskViewModel,
   TaskVMResponse,
 } from '@infra/http/presenters/view-models/task';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 
-type FindByIdTaskDto = {
-  tenantId: string;
-};
-
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class FindTaskByIdController {
@@ -43,9 +41,9 @@ export class FindTaskByIdController {
   @Get(':id')
   public async findByIdTask(
     @Param('id') id: string,
-    @Body() dto: FindByIdTaskDto,
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<TaskVMResponse> {
-    const task = await this.findTaskByIdUseCase.execute({ ...dto, id });
+    const task = await this.findTaskByIdUseCase.execute({ id, tenantId });
 
     return TaskViewModel.toHTTP(task);
   }

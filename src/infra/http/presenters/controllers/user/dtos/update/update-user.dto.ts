@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsOptional, IsUUID } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional } from 'class-validator';
 import { UserRole } from '@core/user/enum';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -20,12 +20,4 @@ export class UpdateUserDto {
     enum: UserRole,
   })
   role: UserRole;
-
-  @IsUUID(7)
-  @IsOptional()
-  @ApiProperty({
-    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
-    description: 'O UUID do inquilino ao qual o usuário pertence.',
-  })
-  tenantId: string;
 }

@@ -1,11 +1,12 @@
 import { Body, Controller, Patch, Param } from '@nestjs/common';
 import {
   ApiTags,
-  ApiOperation,
   ApiBody,
   ApiParam,
-  ApiNotFoundResponse,
+  ApiOperation,
   ApiOkResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
@@ -15,7 +16,9 @@ import {
   UserViewModel,
   UserVMResponse,
 } from '@infra/http/presenters/view-models/user';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class UpdateUserController {
@@ -44,10 +47,12 @@ export class UpdateUserController {
   public async updateUser(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<UserVMResponse> {
     const user = await this.updateUserUseCase.execute({
-      id,
       ...dto,
+      id,
+      tenantId,
     });
 
     return UserViewModel.toHTTP(user);

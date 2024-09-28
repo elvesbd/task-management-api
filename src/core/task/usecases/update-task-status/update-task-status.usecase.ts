@@ -5,7 +5,7 @@ import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 
 type Input = {
-  taskId: string;
+  id: string;
   tenantId: string;
   status: TaskStatus;
 };
@@ -18,20 +18,18 @@ export class UpdateTaskStatusUseCase {
   ) {}
 
   async execute(input: Input): Promise<void> {
-    const { taskId, tenantId, status } = input;
+    const { id, tenantId, status } = input;
+    console.log({ id, tenantId, status });
 
     const tenant = await this.tenantRepository.findById(tenantId);
     if (!tenant)
       throw new NotFoundException(`Tenant with ID ${tenantId} not found.`);
 
-    const task = await this.taskRepository.findByIdAndTenantId(
-      taskId,
-      tenant.id,
-    );
+    const task = await this.taskRepository.findByIdAndTenantId(id, tenant.id);
 
     if (!task)
       throw new NotFoundException(
-        `Task with ID ${taskId} not found for this tenant.`,
+        `Task with ID ${id} not found for this tenant.`,
       );
 
     task.assignStatus(status);

@@ -1,24 +1,27 @@
 import {
   Body,
-  Controller,
+  Put,
+  Param,
   HttpCode,
   HttpStatus,
-  Param,
-  Put,
+  Controller,
 } from '@nestjs/common';
 import {
   ApiTags,
-  ApiOperation,
   ApiBody,
+  ApiOperation,
   ApiOkResponse,
+  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 
 import { ApiPath, ApiTag } from '../constants';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 import { UpdateUserPasswordUseCase } from '@core/user/usecases';
 import { UpdateUserPasswordDto } from '@infra/http/presenters/controllers/user/dtos';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class UpdateUserPasswordController {
@@ -47,7 +50,8 @@ export class UpdateUserPasswordController {
   public async updateUserPassword(
     @Param('id') id: string,
     @Body() dto: UpdateUserPasswordDto,
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<void> {
-    await this.updateUserPasswordUseCase.execute({ ...dto, id });
+    await this.updateUserPasswordUseCase.execute({ ...dto, id, tenantId });
   }
 }

@@ -6,6 +6,7 @@ import { HttpModule } from '@infra/http';
 import { AuthModule } from '@infra/auth';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from '@infra/auth/guards';
+import { RolesGuard } from '@infra/auth/guards/roles.guard';
 
 @Module({
   imports: [
@@ -20,6 +21,10 @@ import { AtGuard } from '@infra/auth/guards';
     {
       provide: APP_GUARD,
       useClass: AtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

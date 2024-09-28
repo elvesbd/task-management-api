@@ -25,12 +25,4 @@ export class UpdateTaskDto {
     description: 'Data limite para a conclusão da tarefa.',
   })
   deadline: Date;
-
-  @IsUUID(7)
-  @IsOptional()
-  @ApiProperty({
-    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
-    description: 'O UUID do inquilino ao qual a tarefa pertence.',
-  })
-  tenantId: string;
 }

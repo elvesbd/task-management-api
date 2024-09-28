@@ -12,11 +12,16 @@ import {
   ApiOperation,
   ApiNotFoundResponse,
   ApiUnauthorizedResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
+import { UserRole } from '@core/user/enum';
 import { ApiPath, ApiTag } from '../constants';
 import { DeleteTaskUseCase } from '@core/task/usecases';
+import { GetCurrentTenantId, Roles } from '@infra/auth/decorators';
 
+@Roles(UserRole.ADMIN)
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class DeleteTaskController {
@@ -41,13 +46,8 @@ export class DeleteTaskController {
   @Delete(':id')
   public async deleteTask(
     @Param('id') id: string,
-    @Body() body: { tenantId: string },
+    @GetCurrentTenantId() tenantId: string,
   ): Promise<void> {
-    const input = {
-      id,
-      tenantId: body.tenantId,
-    };
-
-    await this.deleteTaskUseCase.execute(input);
+    await this.deleteTaskUseCase.execute({ id, tenantId });
   }
 }

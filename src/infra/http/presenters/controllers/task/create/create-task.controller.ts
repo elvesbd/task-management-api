@@ -5,6 +5,7 @@ import {
   ApiOperation,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import {
@@ -13,8 +14,10 @@ import {
 } from '@infra/http/presenters/view-models/task';
 import { ApiPath, ApiTag } from '../constants';
 import { CreateTaskUseCase } from '@core/task/usecases';
+import { GetCurrentTenantId } from '@infra/auth/decorators';
 import { CreateTaskDto } from '@infra/http/presenters/controllers/task/dtos';
 
+@ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class CreateTaskController {
@@ -35,8 +38,11 @@ export class CreateTaskController {
     description: 'Tenant not found.',
   })
   @Post()
-  public async createTask(@Body() dto: CreateTaskDto): Promise<TaskVMResponse> {
-    const task = await this.createTaskUseCase.execute(dto);
+  public async createTask(
+    @Body() dto: CreateTaskDto,
+    @GetCurrentTenantId() tenantId: string,
+  ): Promise<TaskVMResponse> {
+    const task = await this.createTaskUseCase.execute({ ...dto, tenantId });
 
     return TaskViewModel.toHTTP(task);
   }

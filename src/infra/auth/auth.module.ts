@@ -4,10 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JWTService } from './jwt-service/jwt.service';
 import { BcryptService } from './bcrypt/bcrypt.service';
-import { JwtStrategy } from './strategies/jwt/jwt.strategy';
 import { SignToken } from '@core/authentication/ports/token';
-import { PasswordEncryption } from '@core/authentication/ports/encryption';
 import { AtStrategy } from '@infra/auth/strategies/at.strategy';
+import { PasswordEncryption } from '@core/authentication/ports/encryption';
 
 @Module({
   imports: [

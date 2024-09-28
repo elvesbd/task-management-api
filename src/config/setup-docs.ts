@@ -7,9 +7,10 @@ export const setupDocs = (app: INestApplication): void => {
     .setDescription('')
     .setVersion('1.0.0')
     .addBearerAuth({
-      description: '',
       type: 'http',
-      bearerFormat: 'token',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description: 'Insira o token no formato: Bearer <seu_token_aqui>',
     })
     .addTag('')
     .addTag('')
