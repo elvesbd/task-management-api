@@ -15,8 +15,8 @@ import {
 } from '@infra/http/presenters/view-models/user';
 import { ApiPath, ApiTag } from '../constants';
 import { CreateUserUseCase } from '@core/user/usecases';
-import { CreateUserDto } from '@infra/http/presenters/controllers/user/dtos';
 import { GetCurrentTenantId } from '@infra/auth/decorators';
+import { CreateUserDto } from '@infra/http/presenters/controllers/user/dtos';
 
 @ApiBearerAuth()
 @ApiTags(ApiTag)

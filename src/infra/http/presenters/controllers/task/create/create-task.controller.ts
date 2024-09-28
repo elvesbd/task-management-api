@@ -14,8 +14,8 @@ import {
 } from '@infra/http/presenters/view-models/task';
 import { ApiPath, ApiTag } from '../constants';
 import { CreateTaskUseCase } from '@core/task/usecases';
-import { CreateTaskDto } from '@infra/http/presenters/controllers/task/dtos';
 import { GetCurrentTenantId } from '@infra/auth/decorators';
+import { CreateTaskDto } from '@infra/http/presenters/controllers/task/dtos';
 
 @ApiBearerAuth()
 @ApiTags(ApiTag)

@@ -15,10 +15,12 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 
+import { UserRole } from '@core/user/enum';
 import { ApiPath, ApiTag } from '../constants';
 import { DeleteTaskUseCase } from '@core/task/usecases';
-import { GetCurrentTenantId } from '@infra/auth/decorators';
+import { GetCurrentTenantId, Roles } from '@infra/auth/decorators';
 
+@Roles(UserRole.ADMIN)
 @ApiBearerAuth()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
