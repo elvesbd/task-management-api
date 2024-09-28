@@ -1,20 +1,24 @@
-import { Body, Controller, Patch, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Put,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiParam,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiBody,
 } from '@nestjs/swagger';
 
-import { TaskStatus } from '@core/task/enum';
 import { ApiPath, ApiTag } from '../constants';
 import { UpdateTaskStatusUseCase } from '@core/task/usecases';
-
-type UpdateTaskStatusDto = {
-  tenantId: string;
-  status: TaskStatus;
-};
+import { UpdateTaskStatusDto } from '../dtos';
+import { TaskStatus } from '@core/task/enum';
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
@@ -27,10 +31,15 @@ export class UpdateTaskStatusController {
     description: 'Update the status of an existing task.',
   })
   @ApiParam({
-    name: 'taskId',
+    name: 'id',
     required: true,
     description: 'ID of the task to update the status.',
     type: String,
+  })
+  @ApiBody({
+    type: UpdateTaskStatusDto,
+    enum: TaskStatus,
+    description: 'DTO containing tenantId and the new status for the task.',
   })
   @ApiOkResponse({
     description: 'Task status updated successfully.',
@@ -38,17 +47,17 @@ export class UpdateTaskStatusController {
   @ApiNotFoundResponse({
     description: 'Tenant or Task not found.',
   })
-  @Patch(':id/status')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Put(':id/status')
   public async updateTaskStatus(
-    @Param('taskId') taskId: string,
+    @Param('id') id: string,
     @Body() dto: UpdateTaskStatusDto,
   ): Promise<void> {
-    const { tenantId, status } = dto;
-
+    const tenantId = '019235bc-a54b-7117-98ba-9c6a2c4b2e2f';
     await this.updateTaskStatusUseCase.execute({
-      taskId,
+      id,
       tenantId,
-      status,
+      ...dto,
     });
   }
 }

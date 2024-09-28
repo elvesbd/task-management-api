@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { User } from '@core/user/model';
 import { UserRole } from '@core/user/enum';
@@ -8,7 +12,6 @@ import { TenantRepository } from '@core/tenant/ports/repository';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
 
 type Input = {
-  role: UserRole;
   email: string;
   password: string;
   tenantId: string;
@@ -25,6 +28,9 @@ export class CreateUserUseCase implements UseCase<Input, User> {
     const tenant = await this.tenantRepository.findById(input.tenantId);
     if (!tenant)
       throw new NotFoundException(`Tenant not found for ID: ${input.tenantId}`);
+
+    const userExists = await this.userRepository.findByEmail(input.email);
+    if (userExists) throw new ConflictException('User already register');
 
     const hashedPassword = await this.passwordEncryption.hash(input.password);
 

@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { AuthModule } from '@infra/auth';
+import { LoginUseCase } from '@core/authentication/usecases';
 import {
   CreateTenantUseCase,
   DeleteTenantUseCase,
@@ -23,11 +25,13 @@ import {
   FindTaskByIdUseCase,
   UpdateTaskStatusUseCase,
 } from '@core/task/usecases';
+import { LoginController } from '@infra/http/presenters/controllers/authentication';
 import {
   CreateTenantController,
   DeleteTenantController,
   FindAllTenantsController,
   FindByIdTenantController,
+  UpdateTenantController,
 } from '@infra/http/presenters/controllers/tenant';
 import {
   CreateUserController,
@@ -43,20 +47,29 @@ import {
   UpdateTaskController,
   FindAllTasksController,
   FindTaskByIdController,
+  UpdateTaskStatusController,
 } from '@infra/http/presenters/controllers/task';
 import { DatabaseModule } from '@infra/database';
+import { SignToken } from '@core/authentication/ports/token';
 import { UserRepository } from '@core/user/ports/repository';
 import { TaskRepository } from '@core/task/ports/repository';
 import { TenantRepository } from '@core/tenant/ports/repository';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
 import { AppHealthController } from '@infra/http/presenters/controllers/health-check';
-import { AuthModule } from '@infra/auth';
-import { UpdateTenantController } from './presenters/controllers/tenant/update/update-tenant.controller';
-import { UpdateTaskStatusController } from './presenters/controllers/task/update-task-status/update-task-status.controller';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
   providers: [
+    {
+      provide: LoginUseCase,
+      useFactory: (
+        tokenSigner: SignToken,
+        userRepository: UserRepository,
+        passwordEncryption: PasswordEncryption,
+      ): LoginUseCase =>
+        new LoginUseCase(tokenSigner, userRepository, passwordEncryption),
+      inject: [SignToken, UserRepository, PasswordEncryption],
+    },
     {
       provide: CreateTenantUseCase,
       useFactory: (tenantRepository: TenantRepository): CreateTenantUseCase =>
@@ -225,6 +238,7 @@ import { UpdateTaskStatusController } from './presenters/controllers/task/update
     FindAllTasksController,
     FindTaskByIdController,
     UpdateTaskStatusController,
+    LoginController,
   ],
 })
 export class HttpModule {}
