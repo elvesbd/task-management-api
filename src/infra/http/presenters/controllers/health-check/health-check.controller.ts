@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiPath, ApiTag } from './constant';
+import { Public } from '@infra/auth/decorators';
 
 class AppHealth {
   @ApiProperty()
@@ -13,6 +14,7 @@ class AppHealth {
   memoryUsage: NodeJS.MemoryUsage;
 }
 
+@Public()
 @ApiTags(ApiTag)
 @Controller(ApiPath)
 export class AppHealthController {
