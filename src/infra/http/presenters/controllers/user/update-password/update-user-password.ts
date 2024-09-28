@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Patch, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Put,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -35,6 +42,7 @@ export class UpdateUserPasswordController {
   @ApiBadRequestResponse({
     description: 'Current password is incorrect.',
   })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Put(':id/password')
   public async updateUserPassword(
     @Param('id') id: string,

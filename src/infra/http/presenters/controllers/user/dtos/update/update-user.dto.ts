@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
   @IsEmail()
+  @IsOptional()
   @ApiProperty({
     example: 'user@example.com',
     description: 'O endereço de e-mail do usuário',
@@ -14,7 +15,7 @@ export class UpdateUserDto {
     message: 'O valor do campo role deve ser um dos valores permitidos.',
   })
   @ApiProperty({
-    example: 'admin',
+    example: 'Admin',
     description: 'O papel (role) do usuário dentro do sistema.',
     enum: UserRole,
   })
