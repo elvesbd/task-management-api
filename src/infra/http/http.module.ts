@@ -52,6 +52,7 @@ import { PasswordEncryption } from '@core/authentication/ports/encryption';
 import { AppHealthController } from '@infra/http/presenters/controllers/health-check';
 import { AuthModule } from '@infra/auth';
 import { UpdateTenantController } from './presenters/controllers/tenant/update/update-tenant.controller';
+import { UpdateTaskStatusController } from './presenters/controllers/task/update-task-status/update-task-status.controller';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -223,6 +224,7 @@ import { UpdateTenantController } from './presenters/controllers/tenant/update/u
     UpdateTaskController,
     FindAllTasksController,
     FindTaskByIdController,
+    UpdateTaskStatusController,
   ],
 })
 export class HttpModule {}

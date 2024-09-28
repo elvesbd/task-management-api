@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Length,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserPasswordDto {
@@ -10,7 +16,7 @@ export class UpdateUserPasswordDto {
   tenantId: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @Length(8, 128, {
     message: 'A nova senha deve ter entre 8 e 128 caracteres.',
   })
