@@ -6,8 +6,8 @@ import { JWTService } from './jwt-service/jwt.service';
 import { BcryptService } from './bcrypt/bcrypt.service';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
 import { SignToken } from '@core/authentication/ports/token';
-import { JwtKeyService } from './decorators/current-user.decorator';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
+import { AtStrategy } from '@infra/auth/strategies/at.strategy';
 
 @Module({
   imports: [
@@ -23,8 +23,7 @@ import { PasswordEncryption } from '@core/authentication/ports/encryption';
     }),
   ],
   providers: [
-    JwtStrategy,
-    JwtKeyService,
+    AtStrategy,
     {
       provide: PasswordEncryption,
       useClass: BcryptService,
@@ -34,6 +33,6 @@ import { PasswordEncryption } from '@core/authentication/ports/encryption';
       useClass: JWTService,
     },
   ],
-  exports: [JwtStrategy, PasswordEncryption, SignToken],
+  exports: [PasswordEncryption, SignToken],
 })
 export class AuthModule {}
