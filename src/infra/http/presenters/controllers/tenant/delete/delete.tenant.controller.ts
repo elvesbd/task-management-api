@@ -1,4 +1,10 @@
-import { Controller, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -30,6 +36,7 @@ export class DeleteTenantController {
   @ApiNoContentResponse({
     description: 'Tenant deleted successfully.',
   })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   public async deleteTenant(@Param('id') id: string): Promise<void> {
     await this.deleteTenantUseCase.execute(id);

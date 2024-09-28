@@ -5,7 +5,6 @@ import {
   TenantViewModel,
   TenantVMResponse,
 } from '@infra/http/presenters/view-models/tenant';
-import { Tenant } from '@core/tenant/model';
 import { ApiPath, ApiTag } from '../constants';
 import { FindAllTenantUseCase } from '@core/tenant/usecases';
 
@@ -19,7 +18,7 @@ export class FindAllTenantsController {
   })
   @ApiOkResponse({
     description: 'Tenants retrieved successfully.',
-    type: [Tenant],
+    type: [TenantVMResponse],
   })
   @Get()
   public async findAllTenants(): Promise<TenantVMResponse[]> {

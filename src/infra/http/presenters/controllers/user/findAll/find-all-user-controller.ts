@@ -8,7 +8,10 @@ import {
 
 import { ApiPath, ApiTag } from '../constants';
 import { FindAllUserUseCase } from '@core/user/usecases';
-import { UserViewModel } from '@infra/http/presenters/view-models/user';
+import {
+  UserViewModel,
+  UserVMResponse,
+} from '@infra/http/presenters/view-models/user';
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
@@ -23,12 +26,12 @@ export class FindAllUsersController {
   })
   @ApiOkResponse({
     description: 'Users retrieved successfully.',
-    type: [UserViewModel],
+    type: [UserVMResponse],
   })
   @Get()
   public async findAllUsers(
     @Body() dto: { tenantId: string },
-  ): Promise<UserViewModel[]> {
+  ): Promise<UserVMResponse[]> {
     const { tenantId } = dto;
     const users = await this.findAllUserUseCase.execute(tenantId);
 

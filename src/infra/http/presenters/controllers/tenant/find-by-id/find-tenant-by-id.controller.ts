@@ -7,7 +7,6 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
-import { Tenant } from '@core/tenant/model';
 import { ApiPath, ApiTag } from '../constants';
 import { FindByIdTenantUseCase } from '@core/tenant/usecases';
 import {
@@ -31,7 +30,7 @@ export class FindByIdTenantController {
   })
   @ApiOkResponse({
     description: 'Tenant retrieved successfully.',
-    type: Tenant,
+    type: TenantVMResponse,
   })
   @ApiNotFoundResponse({
     description: 'Tenant not found.',

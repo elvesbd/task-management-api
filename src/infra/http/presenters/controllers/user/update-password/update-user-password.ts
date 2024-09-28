@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Put,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -10,13 +17,7 @@ import {
 
 import { ApiPath, ApiTag } from '../constants';
 import { UpdateUserPasswordUseCase } from '@core/user/usecases';
-
-type UpdateUserPasswordDto = {
-  email: string;
-  tenantId: string;
-  newPassword: string;
-  currentPassword: string;
-};
+import { UpdateUserPasswordDto } from '@infra/http/presenters/controllers/user/dtos';
 
 @ApiTags(ApiTag)
 @Controller(ApiPath)
@@ -29,7 +30,7 @@ export class UpdateUserPasswordController {
     description: 'Update user password.',
   })
   @ApiBody({
-    type: String,
+    type: UpdateUserPasswordDto,
     description: 'User email and passwords for update.',
   })
   @ApiOkResponse({
@@ -41,7 +42,8 @@ export class UpdateUserPasswordController {
   @ApiBadRequestResponse({
     description: 'Current password is incorrect.',
   })
-  @Patch(':id/password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Put(':id/password')
   public async updateUserPassword(
     @Param('id') id: string,
     @Body() dto: UpdateUserPasswordDto,

@@ -1,4 +1,11 @@
-import { Body, Controller, Delete, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiParam,
@@ -30,6 +37,7 @@ export class DeleteTaskController {
   @ApiUnauthorizedResponse({
     description: 'Unauthorized to perform this operation.',
   })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   public async deleteTask(
     @Param('id') id: string,

@@ -3,16 +3,28 @@ import { BaseViewModel } from '@infra/http/presenters/view-models/base.view-mode
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserVMResponse {
-  @ApiProperty()
+  @ApiProperty({
+    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
+    description: 'O UUID do usuário.',
+  })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Admin',
+    description: 'O papel (role) do usuário dentro do sistema.',
+  })
   role: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'O endereço de e-mail do usuário.',
+  })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '01890c8c-aa4c-7a0c-95ab-12b5049b3f4a',
+    description: 'O UUID do inquilino ao qual o usuário pertence.',
+  })
   tenantId: string;
 }
 

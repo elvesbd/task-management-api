@@ -35,6 +35,7 @@ import {
   UpdateUserController,
   FindAllUsersController,
   FindUserByIdController,
+  UpdateUserPasswordController,
 } from '@infra/http/presenters/controllers/user';
 import {
   CreateTaskController,
@@ -50,6 +51,8 @@ import { TenantRepository } from '@core/tenant/ports/repository';
 import { PasswordEncryption } from '@core/authentication/ports/encryption';
 import { AppHealthController } from '@infra/http/presenters/controllers/health-check';
 import { AuthModule } from '@infra/auth';
+import { UpdateTenantController } from './presenters/controllers/tenant/update/update-tenant.controller';
+import { UpdateTaskStatusController } from './presenters/controllers/task/update-task-status/update-task-status.controller';
 
 @Module({
   imports: [DatabaseModule, AuthModule],
@@ -209,9 +212,11 @@ import { AuthModule } from '@infra/auth';
     DeleteTenantController,
     FindAllTenantsController,
     FindByIdTenantController,
+    UpdateTenantController,
     CreateUserController,
     DeleteUserController,
     UpdateUserController,
+    UpdateUserPasswordController,
     FindAllUsersController,
     FindUserByIdController,
     CreateTaskController,
@@ -219,6 +224,7 @@ import { AuthModule } from '@infra/auth';
     UpdateTaskController,
     FindAllTasksController,
     FindTaskByIdController,
+    UpdateTaskStatusController,
   ],
 })
 export class HttpModule {}
