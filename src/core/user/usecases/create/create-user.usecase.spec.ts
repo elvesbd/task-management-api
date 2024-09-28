@@ -27,6 +27,7 @@ describe('CreateUserUseCase', () => {
       provide: UserRepository,
       useValue: {
         save: jest.fn(),
+        findByEmail: jest.fn().mockResolvedValue(null),
       },
     };
 
@@ -79,6 +80,21 @@ describe('CreateUserUseCase', () => {
 
       await expect(sut.execute(input)).rejects.toThrow(
         new NotFoundException(`Tenant not found for ID: ${input.tenantId}`),
+      );
+    });
+
+    it('call userRepository findByEmail with correct values', async () => {
+      await sut.execute(input);
+
+      expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(input.email);
+    });
+
+    it('should throw a ConflictException if user already register', async () => {
+      jest.spyOn(userRepository, 'findByEmail').mockResolvedValueOnce(user);
+
+      await expect(sut.execute(input)).rejects.toThrow(
+        new NotFoundException('User already register'),
       );
     });
 

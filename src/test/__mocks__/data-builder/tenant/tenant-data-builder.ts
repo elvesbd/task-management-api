@@ -2,12 +2,16 @@ type Tenant = {
   id?: string;
   name: string;
   document: string;
+  adminEmail: string;
+  adminPassword: string;
 };
 
 export class TenantDataBuilder {
   private props: Tenant = {
     name: 'InovaTech Solutions',
     document: '41650433000170',
+    adminEmail: 'admin@mail.com',
+    adminPassword: 'cdf#8&789>62',
   };
 
   public static anTenant(): TenantDataBuilder {

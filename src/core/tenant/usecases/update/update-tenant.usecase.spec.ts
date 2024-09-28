@@ -20,7 +20,7 @@ describe('UpdateTenantUseCase', () => {
       provide: TenantRepository,
       useValue: {
         save: jest.fn().mockResolvedValue(0),
-        findByDocument: jest.fn().mockResolvedValue(tenant),
+        findById: jest.fn().mockResolvedValue(tenant),
       },
     };
 
@@ -41,9 +41,7 @@ describe('UpdateTenantUseCase', () => {
     const tenantId = '019229dc-e8c6-72cc-b599-c938df401967';
 
     it('should throw NotFoundException if tenant not found', async () => {
-      jest
-        .spyOn(tenantRepository, 'findByDocument')
-        .mockResolvedValueOnce(null);
+      jest.spyOn(tenantRepository, 'findById').mockResolvedValueOnce(null);
 
       await expect(sut.execute({ ...input, id: tenantId })).rejects.toThrow(
         new NotFoundException('Tenant not found!'),
