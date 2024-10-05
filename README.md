@@ -70,16 +70,16 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo:
     MYSQL_PASSWORD=BeIFT10>@x
    ```
 
-4. **Rodar as migrations:**
-
-   ```bash
-   npm run migration:run
-   ```
-
-5. **Subir o container do banco de dados com Docker Compose:**
+4. **Subir o container do banco de dados com Docker Compose:**
 
    ```bash
    docker-compose up -d
+   ```
+
+5. **Rodar as migrations:**
+
+   ```bash
+   npm run migration:run
    ```
 
 6. **Executar a aplicação:**
@@ -93,3 +93,11 @@ Para rodar este projeto em sua máquina local, siga os passos abaixo:
 Após rodar o projeto, é necessário cadastrar uma empresa utilizando o endpoint `POST /tenants`. Ao cadastrar a primeira empresa, um usuário Admin será criado automaticamente para essa empresa, e você estará autorizado a acessar as funcionalidades da API.
 
 **Importante:** Para acessar os recursos, é necessário enviar o token gerado no login (endpoint `POST /auth/login`)
+
+## Documentação da API
+
+A documentação completa da API estará disponível no endpoint:
+
+```bash
+ /api-docs
+```
