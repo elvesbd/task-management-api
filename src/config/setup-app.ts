@@ -1,6 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import * as helmet from 'helmet';
 
 export const setupApp = (app: INestApplication): INestApplication => {
+  app.use(helmet);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
